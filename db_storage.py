@@ -9,16 +9,17 @@ DATABASE_URL = os.getenv("DATABASE_URL", "")
 
 # Function to initialize and get database connection
 def get_db_connection():
-    """Get a database connection if available"""
     if not DATABASE_URL:
         st.warning("Database connection not configured. Historical data storage is disabled.")
         return None
     
     try:
         engine = create_engine(DATABASE_URL)
+        with engine.connect() as conn:
+            conn.execute(text("SELECT 1"))  # simple test query
         return engine
     except Exception as e:
-        st.warning(f"Could not connect to database. Historical data storage is disabled.")
+        st.error(f"Database connection failed: {e}")
         return None
 
 # Function to create tables if they don't exist
