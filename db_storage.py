@@ -167,3 +167,20 @@ def get_historical_data_from_db(zip_codes, days=7):
 
 # Initialize tables when module is imported
 initialize_tables()
+
+def store_api_data(air_quality_data, location_name_map):
+    """
+    Wrapper to store air quality API data using store_air_quality_data.
+    Includes debug print messages for Render logs.
+    """
+    from datetime import datetime
+    print("🔄 Starting API data storage...")
+
+    if air_quality_data:
+        try:
+            store_air_quality_data(air_quality_data, location_name_map)
+            print("✅ Finished storing API data.")
+        except Exception as e:
+            print(f"❌ Failed to store API data: {e}")
+    else:
+        print("⚠️ No air quality data to store.")
