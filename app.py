@@ -8,6 +8,14 @@ from air_quality_data import get_cached_air_quality_data
 from visualizations import plot_aqi_comparison, plot_aqi_time_series, create_aqi_indicator
 from utils import get_aqi_category, format_datetime, prepare_comparison_data, prepare_time_series_data
 
+# ✅ SET PAGE CONFIG — MUST BE FIRST Streamlit command
+st.set_page_config(
+    page_title="Colorado Air Quality Dashboard",
+    page_icon="🌍",
+    layout="wide",
+    initial_sidebar_state="expanded",
+)
+
 # === THEME SWITCHING ===
 theme = st.sidebar.radio("Select Theme", ["Light", "Dark"], index=0)
 custom_css = """
@@ -25,13 +33,7 @@ custom_css = """
 )
 st.markdown(custom_css, unsafe_allow_html=True)
 
-st.set_page_config(
-    page_title="Colorado Air Quality Dashboard",
-    page_icon="🌍",
-    layout="wide",
-    initial_sidebar_state="expanded",
-)
-
+# === HEADER ===
 st.markdown("""
     <h1 style='text-align: center; font-size: 2.6rem;'>🌍 Colorado Air Quality Dashboard</h1>
     <p style='text-align: center; font-size: 1.1rem; color: #6c757d;'>
@@ -40,7 +42,7 @@ st.markdown("""
     <hr style='margin-top: -1rem; margin-bottom: 2rem;' />
 """, unsafe_allow_html=True)
 
-# Sidebar - ZIP code selection
+# === SIDEBAR FILTER ===
 st.sidebar.header("ZIP Code Filter")
 selected_zips = st.sidebar.multiselect(
     "Select ZIP Codes",
