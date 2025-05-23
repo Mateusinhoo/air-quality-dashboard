@@ -59,7 +59,7 @@ if st.sidebar.button("Refresh Data"):
     st.rerun()
 
 # === Fetch and Prepare Data ===
-data = get_cached_air_quality_data()
+data = get_cached_air_quality_data(selected_zips)
 time_series_data = prepare_time_series_data(data, selected_zips)
 comparison_data = prepare_comparison_data(data, selected_zips)
 
