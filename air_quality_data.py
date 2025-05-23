@@ -131,35 +131,28 @@ def fetch_historical_air_quality(zip_codes, days=7):
     
     return historical_data
 
-@st.cache_data(ttl=3600)  # Cache for 1 hour
-def get_cached_air_quality_data(zip_codes):
-    """
-    Get cached air quality data to avoid frequent API calls.
-    Store data in database for historical records.
-    
-    Args:
-        zip_codes (list): List of ZIP codes to fetch data for
-        
-    Returns:
-        tuple: (current_data, historical_data)
-    """
-    # Fetch current air quality data from API
+def get_air_quality_data(zip_codes):
     current_data = fetch_current_air_quality(zip_codes)
-    
-    # Store the current data in the database for historical records
+    api_historical_data = fetch_historical_air_quality(zip_codes)
+
+    return current_data, api_historical_data
+
+@st.cache_data(ttl=3600)
+def get_cached_data_only(zip_codes):
+    return get_air_quality_data(zip_codes)
+
+def get_cached_air_quality_data(zip_codes):
+    current_data, api_historical_data = get_cached_data_only(zip_codes)
+
+    # Store current data in DB
     if current_data:
         db_storage.store_air_quality_data(current_data, COLORADO_ZIPS)
-    
-    # Try to get historical data from API first
-    api_historical_data = fetch_historical_air_quality(zip_codes)
-    
-    # If API historical data is limited, supplement with database records
+
     if api_historical_data:
-        # Store API historical data in the database too
         db_storage.store_air_quality_data(api_historical_data, COLORADO_ZIPS)
         historical_data = api_historical_data
     else:
-        # Fall back to database historical data if API doesn't provide it
         historical_data = db_storage.get_historical_data_from_db(zip_codes)
-    
+        
+
     return current_data, historical_data

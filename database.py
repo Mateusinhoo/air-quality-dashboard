@@ -316,33 +316,29 @@ def store_api_data(air_quality_data, location_name_map):
     session = Session()
     
     try:
+        print("🔄 Starting API data storage...")
+
         # Add/update pollutants if needed
         pm25_id = add_or_update_pollutant("PM2.5", "Fine Particulate Matter", 
                                          "Fine particulate matter (PM2.5) consists of tiny particles or droplets in the air that are 2.5 microns or less in width.")
-        
         o3_id = add_or_update_pollutant("O3", "Ozone", 
-                                       "Ground-level ozone is created by chemical reactions between oxides of nitrogen (NOx) and volatile organic compounds (VOCs) in the presence of sunlight.")
+                                       "Ground-level ozone is created by chemical reactions between NOx and VOCs in the presence of sunlight.")
         
         pollutant_map = {"PM2.5": pm25_id, "O3": o3_id}
         
-        # Process each location and reading
         for zip_code, pollutant_data in air_quality_data.items():
-            # Add/update location
             location_name = location_name_map.get(zip_code, f"Location {zip_code}")
             location_id = add_or_update_location(zip_code, location_name)
-            
-            # Store readings for each pollutant
+            print(f"📍 Location '{location_name}' ({zip_code}) saved with ID {location_id}")
+
             for pollutant_name, reading in pollutant_data.items():
                 if pollutant_name in pollutant_map and isinstance(reading, dict) and 'AQI' in reading:
-                    # Parse date
                     date_str = reading.get('DateObserved', '').strip()
                     try:
                         date_observed = datetime.strptime(date_str, '%Y-%m-%d').date()
                     except:
-                        # If date parsing fails, use current date
                         date_observed = datetime.now().date()
                     
-                    # Parse time if available
                     time_observed = None
                     time_str = reading.get('HourObserved')
                     if time_str and date_observed:
@@ -354,7 +350,8 @@ def store_api_data(air_quality_data, location_name_map):
                         except:
                             pass
                     
-                    # Store the reading
+                    print(f"📝 Inserting {pollutant_name} reading for {zip_code} on {date_observed} at {time_observed} — AQI: {reading.get('AQI')}")
+
                     store_air_quality_reading(
                         location_id=location_id,
                         pollutant_id=pollutant_map[pollutant_name],
@@ -365,11 +362,13 @@ def store_api_data(air_quality_data, location_name_map):
                         units=reading.get('Unit'),
                         category=reading.get('Category')
                     )
+
     except Exception as e:
         session.rollback()
-        print(f"Error storing API data: {e}")
+        print(f"❌ Error storing API data: {e}")
     finally:
         session.close()
+        print("✅ Finished storing API data.")
 
 # Initialize database when imported
 try:
