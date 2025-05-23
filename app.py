@@ -11,8 +11,16 @@ st.set_page_config(
     initial_sidebar_state="expanded",
 )
 
-st.markdown("# 🫁 Colorado Air Quality Dashboard")
-st.markdown("This dashboard tracks real-time PM2.5 and Ozone levels in selected ZIP codes in Colorado.")
+# Clean page layout and branding
+st.markdown("""
+    <h1 style='text-align: center; font-size: 2.8rem; color: #4B8BBE;'>
+        🫁 Colorado Air Quality Dashboard
+    </h1>
+    <p style='text-align: center; font-size: 1.1rem; color: #6c757d; margin-bottom: 2rem;'>
+        Real-time PM2.5 and Ozone levels in selected ZIP codes — updated daily
+    </p>
+    <hr style='margin-top: -1rem; margin-bottom: 2rem;' />
+""", unsafe_allow_html=True)
 
 st.markdown("### 🔎 Summary")
 st.markdown("- **Highest AQI Today:** Boulder (O3 - 122, Unhealthy for Sensitive Groups)")
