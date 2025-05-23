@@ -1,4 +1,4 @@
-from db_storage import store_api_data
+from database import store_api_data
 import streamlit as st
 import pandas as pd
 from datetime import datetime
