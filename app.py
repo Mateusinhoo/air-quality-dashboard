@@ -1,3 +1,4 @@
+from db_storage import store_api_data
 import streamlit as st
 import pandas as pd
 from datetime import datetime
@@ -144,15 +145,17 @@ for pollutant, info in POLLUTANTS.items():
 
 # Load data with a loading spinner
 with st.spinner("Loading air quality data..."):
-    # Fetch the data
     try:
         current_data, historical_data = get_cached_air_quality_data(selected_zips)
         
-        # Prepare data for visualizations
+        # ✅ Save current data to the database explicitly
+        from db_storage import store_api_data
+        store_api_data(current_data, COLORADO_ZIPS)
+
+        # Prepare visualizations
         comparison_data = prepare_comparison_data(current_data)
         time_series_data = prepare_time_series_data(historical_data)
-        
-        # Check if we have data
+
         if not current_data and not historical_data:
             st.error("No data available. Please check your API key and try again.")
             st.stop()
