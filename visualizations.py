@@ -66,12 +66,19 @@ def show_aqi_cards(data):
 
 
 def plot_pollution_trend(data, pollutant):
-    fig, ax = plt.subplots()
-    ax.plot(data["Date"], data["Value"], marker='o')
-    ax.set_title(f"{pollutant} Trend Over Time")
-    ax.set_ylabel(f"{pollutant} Level")
-    ax.set_xlabel("Date")
-    ax.grid(True)
+    if data.empty:
+        st.info("No air quality trend data available for this ZIP and pollutant.")
+        return
+
+    fig, ax = plt.subplots(figsize=(8, 4))
+    ax.plot(data["Date"], data["Value"], marker='o', linewidth=2, color="#3366cc")
+    ax.set_title(f"{pollutant} Trend Over Time", fontsize=16, fontweight="bold", pad=10)
+    ax.set_ylabel(f"{pollutant} Level", fontsize=12)
+    ax.set_xlabel("Date", fontsize=12)
+    ax.grid(visible=True, linestyle='--', linewidth=0.5, alpha=0.6)
+    ax.set_facecolor("#fafafa")
+    fig.patch.set_facecolor('#ffffff')
+    plt.xticks(rotation=45)
     st.pyplot(fig)
 
 
