@@ -83,5 +83,21 @@ def plot_pollution_trend(data, pollutant):
 
 
 def plot_asthma_vs_pollution(air_data, asthma_data):
-    st.metric(label="Current Asthma Rate", value=f"{asthma_data['Asthma Rate'].iloc[0]}%")
-    st.line_chart(air_data.set_index("Date"))
+    if air_data.empty or asthma_data.empty:
+        st.info("Not enough data to compare asthma and pollution.")
+        return
+
+    asthma_rate = asthma_data['Asthma Rate'].iloc[0]
+
+    fig, ax = plt.subplots(figsize=(8, 4))
+    ax.plot(air_data["Date"], air_data["Value"], marker='o', linewidth=2, label="Pollution", color="#3366cc")
+    ax.axhline(y=asthma_rate, color='red', linestyle='--', label=f'Asthma Rate ({asthma_rate}%)')
+    ax.set_title("Pollution Trend vs Asthma Rate", fontsize=16, fontweight="bold", pad=10)
+    ax.set_ylabel("Pollution Level", fontsize=12)
+    ax.set_xlabel("Date", fontsize=12)
+    ax.grid(visible=True, linestyle='--', linewidth=0.5, alpha=0.6)
+    ax.set_facecolor("#fafafa")
+    fig.patch.set_facecolor('#ffffff')
+    plt.xticks(rotation=45)
+    ax.legend()
+    st.pyplot(fig)
