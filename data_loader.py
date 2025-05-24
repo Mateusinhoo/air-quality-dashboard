@@ -36,3 +36,6 @@ def get_air_quality_data(zip_code, pollutant):
     except Exception as e:
         print("Error fetching air quality data:", e)
         return pd.DataFrame(columns=["Date", "Value"])
+
+def get_asthma_data(zip_code):
+    return pd.DataFrame({"Zip": [zip_code], "Asthma Rate": [12.3]})
