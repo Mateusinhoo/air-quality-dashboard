@@ -9,6 +9,13 @@ st.set_page_config(page_title="Colorado Air & Asthma Tracker", page_icon="🫁",
 st.markdown("# 🫁 Colorado Air & Asthma Tracker")
 st.markdown("Explore the relationship between air quality and asthma in Colorado ZIP codes.")
 
+from visualizations import create_aqi_map
+from data_loader import get_map_data
+
+st.markdown("## 🗺️ Colorado Air Quality Map")
+map_data = get_map_data()
+create_aqi_map(map_data)
+
 col1, col2 = st.columns([1, 1])
 with col1:
     zip_code = st.selectbox("Choose a ZIP Code", COLORADO_ZIPS)
