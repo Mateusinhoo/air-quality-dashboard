@@ -73,7 +73,9 @@ asthma_data = get_asthma_data(zip_code)
 
 # Visualizations
 st.markdown("### 📊 Pollution Trend")
+st.caption("Recent air quality levels for the selected ZIP and pollutant.")
 plot_pollution_trend(air_data, pollutant)
+st.markdown("&nbsp;", unsafe_allow_html=True)
 
 st.markdown("### 🫁 Asthma and Pollution Correlation")
 plot_asthma_vs_pollution(air_data, asthma_data)
