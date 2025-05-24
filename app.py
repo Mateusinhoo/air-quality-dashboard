@@ -78,7 +78,9 @@ plot_pollution_trend(air_data, pollutant)
 st.markdown("&nbsp;", unsafe_allow_html=True)
 
 st.markdown("### 🫁 Asthma and Pollution Correlation")
+st.caption("Compare the recent pollution trend with the local asthma rate.")
 plot_asthma_vs_pollution(air_data, asthma_data)
+st.markdown("&nbsp;", unsafe_allow_html=True)
 
 # Footer (optional)
 st.markdown("---")
