@@ -39,3 +39,10 @@ def get_air_quality_data(zip_code, pollutant):
 
 def get_asthma_data(zip_code):
     return pd.DataFrame({"Zip": [zip_code], "Asthma Rate": [12.3]})
+
+def get_map_data():
+    return [
+        {"zip": "80202", "lat": 39.75, "lon": -104.99, "AQI": 85, "Pollutant": "PM2.5"},
+        {"zip": "80301", "lat": 40.01, "lon": -105.27, "AQI": 42, "Pollutant": "Ozone"},
+        # more ZIPs here
+    ]
