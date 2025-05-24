@@ -1,7 +1,7 @@
 import streamlit as st
 import pydeck as pdk
 import pandas as pd
-import matplotlib.pyplot as plt
+import plotly.graph_objects as go
 
 
 def create_aqi_map(data):
@@ -70,16 +70,27 @@ def plot_pollution_trend(data, pollutant):
         st.info("No air quality trend data available for this ZIP and pollutant.")
         return
 
-    fig, ax = plt.subplots(figsize=(8, 4))
-    ax.plot(data["Date"], data["Value"], marker='o', linewidth=2, color="#3366cc")
-    ax.set_title(f"{pollutant} Trend Over Time", fontsize=16, fontweight="bold", pad=10)
-    ax.set_ylabel(f"{pollutant} Level", fontsize=12)
-    ax.set_xlabel("Date", fontsize=12)
-    ax.grid(visible=True, linestyle='--', linewidth=0.5, alpha=0.6)
-    ax.set_facecolor("#fafafa")
-    fig.patch.set_facecolor('#ffffff')
-    plt.xticks(rotation=45)
-    st.pyplot(fig)
+    fig = go.Figure()
+
+    fig.add_trace(go.Scatter(
+        x=data["Date"],
+        y=data["Value"],
+        mode="lines+markers",
+        name=f"{pollutant} Level",
+        line=dict(color="royalblue", width=2)
+    ))
+
+    fig.update_layout(
+        height=300,
+        title=f"{pollutant} Trend Over Time",
+        margin=dict(l=20, r=20, t=40, b=20),
+        paper_bgcolor="white",
+        plot_bgcolor="#fafafa",
+        font=dict(size=12),
+        showlegend=True
+    )
+
+    st.plotly_chart(fig, use_container_width=True)
 
 
 def plot_asthma_vs_pollution(air_data, asthma_data):
@@ -89,15 +100,32 @@ def plot_asthma_vs_pollution(air_data, asthma_data):
 
     asthma_rate = asthma_data['Asthma Rate'].iloc[0]
 
-    fig, ax = plt.subplots(figsize=(8, 4))
-    ax.plot(air_data["Date"], air_data["Value"], marker='o', linewidth=2, label="Pollution", color="#3366cc")
-    ax.axhline(y=asthma_rate, color='red', linestyle='--', label=f'Asthma Rate ({asthma_rate}%)')
-    ax.set_title("Pollution Trend vs Asthma Rate", fontsize=16, fontweight="bold", pad=10)
-    ax.set_ylabel("Pollution Level", fontsize=12)
-    ax.set_xlabel("Date", fontsize=12)
-    ax.grid(visible=True, linestyle='--', linewidth=0.5, alpha=0.6)
-    ax.set_facecolor("#fafafa")
-    fig.patch.set_facecolor('#ffffff')
-    plt.xticks(rotation=45)
-    ax.legend()
-    st.pyplot(fig)
+    fig = go.Figure()
+
+    fig.add_trace(go.Scatter(
+        x=air_data["Date"],
+        y=air_data["Value"],
+        mode="lines+markers",
+        name="Pollution Level",
+        line=dict(color="royalblue", width=2)
+    ))
+
+    fig.add_trace(go.Scatter(
+        x=air_data["Date"],
+        y=[asthma_rate] * len(air_data),
+        mode="lines",
+        name=f"Asthma Rate ({asthma_rate}%)",
+        line=dict(color="firebrick", dash="dash")
+    ))
+
+    fig.update_layout(
+        height=300,
+        title="Pollution vs Asthma Rate",
+        margin=dict(l=20, r=20, t=40, b=20),
+        paper_bgcolor="white",
+        plot_bgcolor="#fafafa",
+        font=dict(size=12),
+        showlegend=True
+    )
+
+    st.plotly_chart(fig, use_container_width=True)
