@@ -1,4 +1,3 @@
-# visualizations.py
 import streamlit as st
 import pydeck as pdk
 import pandas as pd
@@ -55,7 +54,8 @@ def show_aqi_cards(data):
     for i, row in df.iterrows():
         category, color = get_aqi_category(row['AQI'])
         card_html = f"""
-        <div style='background-color:{color}; padding:1rem; border-radius:1rem; text-align:center; box-shadow:0 2px 5px rgba(0,0,0,0.1);'>
+        <div style='background-color:{color}; padding:1rem; border-radius:1rem;
+                    text-align:center; box-shadow:0 2px 5px rgba(0,0,0,0.1);'>
             <h3 style='margin:0;'>ZIP {row['zip']}</h3>
             <p style='font-size:2rem; margin:0;'>{row['AQI']}</p>
             <small>{row['Pollutant']}</small><br>
