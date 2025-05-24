@@ -71,14 +71,15 @@ with col2:
 air_data = get_air_quality_data(zip_code, pollutant)
 asthma_data = get_asthma_data(zip_code)
 
-# Visualizations
+# Pollution trend section
 st.markdown("### 📊 Pollution Trend")
-st.caption("Recent air quality levels for the selected ZIP and pollutant.")
+st.caption("Recent air quality levels for the selected ZIP and pollutant. Interactive and zoomable.")
 plot_pollution_trend(air_data, pollutant)
 st.markdown("&nbsp;", unsafe_allow_html=True)
 
+# Asthma correlation section
 st.markdown("### 🫁 Asthma and Pollution Correlation")
-st.caption("Compare the recent pollution trend with the local asthma rate.")
+st.caption("This chart compares recent pollution trends with local asthma rates. Interactive and compact.")
 plot_asthma_vs_pollution(air_data, asthma_data)
 st.markdown("&nbsp;", unsafe_allow_html=True)
 
