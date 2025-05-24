@@ -77,7 +77,7 @@ def plot_pollution_trend(data, pollutant):
         y=data["Value"],
         mode="lines+markers",
         name=f"{pollutant} Level",
-        line=dict(color="royalblue", width=2)
+        line=dict(color="#1976d2", width=3)
     ))
 
     fig.update_layout(
@@ -85,8 +85,8 @@ def plot_pollution_trend(data, pollutant):
         title=f"{pollutant} Trend Over Time",
         margin=dict(l=20, r=20, t=40, b=20),
         paper_bgcolor="white",
-        plot_bgcolor="#fafafa",
-        font=dict(size=12),
+        plot_bgcolor="#f0f2f6",
+        font=dict(size=13, color="#333"),
         showlegend=True
     )
 
@@ -107,7 +107,7 @@ def plot_asthma_vs_pollution(air_data, asthma_data):
         y=air_data["Value"],
         mode="lines+markers",
         name="Pollution Level",
-        line=dict(color="royalblue", width=2)
+        line=dict(color="#1976d2", width=3)
     ))
 
     fig.add_trace(go.Scatter(
@@ -115,7 +115,7 @@ def plot_asthma_vs_pollution(air_data, asthma_data):
         y=[asthma_rate] * len(air_data),
         mode="lines",
         name=f"Asthma Rate ({asthma_rate}%)",
-        line=dict(color="firebrick", dash="dash")
+        line=dict(color="#d32f2f", dash="dash")
     ))
 
     fig.update_layout(
@@ -123,8 +123,8 @@ def plot_asthma_vs_pollution(air_data, asthma_data):
         title="Pollution vs Asthma Rate",
         margin=dict(l=20, r=20, t=40, b=20),
         paper_bgcolor="white",
-        plot_bgcolor="#fafafa",
-        font=dict(size=12),
+        plot_bgcolor="#f0f2f6",
+        font=dict(size=13, color="#333"),
         showlegend=True
     )
 
