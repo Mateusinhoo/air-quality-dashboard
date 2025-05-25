@@ -7,11 +7,12 @@ from visualizations import (
     plot_pollution_trend,
     plot_asthma_vs_pollution
 )
+import base64
 
 # Page config
 st.set_page_config(page_title="Colorado Air & Asthma Tracker", page_icon="🫁", layout="wide")
 
-# Custom CSS for styling - Enhanced for a clean, professional look with consistent background
+# Custom CSS for styling - Enhanced for a professional look inspired by IQAir and portfolio site
 st.markdown("""
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
@@ -26,21 +27,21 @@ st.markdown("""
         }
         
         /* Remove white strips/boxes */
-        .css-18e3th9, .css-1d391kg, .css-12oz5g7 {
+        .css-18e3th9, .css-1d391kg, .css-12oz5g7, .st-emotion-cache-18e3th9, .st-emotion-cache-1d391kg {
             padding: 0 !important;
             background-color: #f8fafc !important;
         }
         
         /* Ensure consistent background for all elements */
-        .st-emotion-cache-18e3th9, .st-emotion-cache-1d391kg {
+        div[data-testid="stVerticalBlock"] {
             background-color: #f8fafc !important;
         }
 
         .block-container {
-            padding-top: 2rem;
+            padding-top: 1rem;
             padding-bottom: 3rem;
-            padding-left: 2.5rem;
-            padding-right: 2.5rem;
+            padding-left: 2rem;
+            padding-right: 2rem;
             max-width: 1200px;
             margin: 0 auto;
             background-color: #f8fafc;
@@ -151,13 +152,18 @@ st.markdown("""
             background-color: #ffffff;
             border-radius: 0.75rem;
             padding: 1.5rem;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.08);
             margin-bottom: 2rem;
+            transition: transform 0.2s ease-in-out;
         }
         
-        /* Navigation bar styling */
+        .section-card:hover {
+            transform: translateY(-2px);
+        }
+        
+        /* Navigation bar styling - inspired by IQAir and portfolio site */
         .nav-container {
-            background-color: #1e3a8a;
+            background: linear-gradient(90deg, #1e3a8a 0%, #2563eb 100%);
             padding: 1rem 2rem;
             display: flex;
             justify-content: space-between;
@@ -165,6 +171,7 @@ st.markdown("""
             color: white;
             margin-bottom: 2rem;
             border-radius: 0.5rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
         
         .nav-title {
@@ -175,7 +182,7 @@ st.markdown("""
         
         .nav-links {
             display: flex;
-            gap: 2rem;
+            gap: 1rem;
         }
         
         .nav-link {
@@ -184,15 +191,99 @@ st.markdown("""
             font-weight: 500;
             padding: 0.5rem 1rem;
             border-radius: 0.25rem;
-            transition: background-color 0.2s;
+            transition: all 0.2s;
         }
         
         .nav-link:hover {
             background-color: rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
         }
         
         .nav-link.active {
             background-color: rgba(255, 255, 255, 0.2);
+        }
+        
+        /* Colorful tab navigation inspired by portfolio site */
+        .tab-nav {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            overflow-x: auto;
+            padding-bottom: 0.5rem;
+        }
+        
+        .tab-link {
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            text-decoration: none;
+            color: white;
+            transition: all 0.2s;
+            text-align: center;
+            min-width: 100px;
+        }
+        
+        .tab-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        .tab-home {
+            background-color: #3b82f6;
+        }
+        
+        .tab-about {
+            background-color: #8b5cf6;
+        }
+        
+        .tab-data {
+            background-color: #10b981;
+        }
+        
+        .tab-resources {
+            background-color: #f59e0b;
+        }
+        
+        /* Hero section styling */
+        .hero-section {
+            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://images.unsplash.com/photo-1519501025264-65ba15a82390?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 4rem 2rem;
+            border-radius: 0.75rem;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+        
+        .hero-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: white;
+        }
+        
+        .hero-subtitle {
+            font-size: 1.25rem;
+            max-width: 700px;
+            margin: 0 auto 2rem auto;
+            color: rgba(255, 255, 255, 0.9);
+        }
+        
+        .hero-button {
+            background-color: #2563eb;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.2s;
+        }
+        
+        .hero-button:hover {
+            background-color: #1d4ed8;
+            transform: translateY(-2px);
         }
         
         /* About section styling */
@@ -200,10 +291,12 @@ st.markdown("""
             display: flex;
             gap: 2rem;
             margin-bottom: 2rem;
+            flex-wrap: wrap;
         }
         
         .about-text {
             flex: 2;
+            min-width: 300px;
         }
         
         .about-skills {
@@ -211,6 +304,7 @@ st.markdown("""
             background-color: #f1f5f9;
             padding: 1.5rem;
             border-radius: 0.75rem;
+            min-width: 250px;
         }
         
         .skill-item {
@@ -243,17 +337,86 @@ st.markdown("""
             background-color: #f0f9ff !important;
             border-left-color: #0ea5e9 !important;
         }
+        
+        /* Breadcrumb styling */
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            font-size: 0.875rem;
+        }
+        
+        .breadcrumb-item {
+            color: #6b7280;
+        }
+        
+        .breadcrumb-separator {
+            margin: 0 0.5rem;
+            color: #9ca3af;
+        }
+        
+        .breadcrumb-current {
+            color: #2563eb;
+            font-weight: 500;
+        }
+        
+        /* Stats counter styling */
+        .stats-container {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .stat-item {
+            background-color: white;
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            flex: 1;
+            min-width: 150px;
+            transition: transform 0.2s;
+        }
+        
+        .stat-item:hover {
+            transform: translateY(-5px);
+        }
+        
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #2563eb;
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-label {
+            font-size: 0.875rem;
+            color: #6b7280;
+        }
     </style>
 """, unsafe_allow_html=True)
 
-# Navigation
+# Function to get Colorado background image
+def get_colorado_image():
+    return "https://images.unsplash.com/photo-1519501025264-65ba15a82390?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80"
+
+# Navigation with colorful tabs inspired by portfolio site
 st.markdown("""
 <div class="nav-container">
     <div class="nav-title">Colorado Air & Asthma Tracker</div>
     <div class="nav-links">
-        <a href="/" class="nav-link" id="home-link">Home</a>
-        <a href="#" onclick="showAbout(); return false;" class="nav-link" id="about-link">About</a>
+        <a href="#" class="nav-link" id="home-link">Home</a>
+        <a href="#" class="nav-link" id="about-link">About</a>
     </div>
+</div>
+
+<div class="tab-nav">
+    <a href="#" class="tab-link tab-home" id="tab-home">Home</a>
+    <a href="#" class="tab-link tab-about" id="tab-about">About</a>
+    <a href="#" class="tab-link tab-data" id="tab-data">Data</a>
+    <a href="#" class="tab-link tab-resources" id="tab-resources">Resources</a>
 </div>
 """, unsafe_allow_html=True)
 
@@ -270,14 +433,50 @@ with tab1:
         # If page is about, we'll show the about content in tab2
         pass
     else:
-        # Title and intro
-        st.markdown("# Colorado Air & Asthma Tracker")
-        st.markdown("Explore real-time air quality across Colorado ZIP codes and how it correlates with asthma.")
+        # Hero section with Colorado background
+        st.markdown(f"""
+        <div class="hero-section">
+            <h1 class="hero-title">Colorado Air & Asthma Tracker</h1>
+            <p class="hero-subtitle">Explore real-time air quality across Colorado and understand its impact on asthma rates. Make informed decisions for your respiratory health.</p>
+            <a href="#data" class="hero-button">Explore Data</a>
+        </div>
+        """, unsafe_allow_html=True)
+        
+        # Breadcrumb navigation
+        st.markdown("""
+        <div class="breadcrumb">
+            <span class="breadcrumb-item">USA</span>
+            <span class="breadcrumb-separator">›</span>
+            <span class="breadcrumb-current">Colorado</span>
+        </div>
+        """, unsafe_allow_html=True)
+        
+        # Stats counters
+        st.markdown("""
+        <div class="stats-container">
+            <div class="stat-item">
+                <div class="stat-value">471</div>
+                <div class="stat-label">Monitoring Stations</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value">8.7%</div>
+                <div class="stat-label">Avg. Asthma Rate</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value">24/7</div>
+                <div class="stat-label">Real-time Updates</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value">PM2.5</div>
+                <div class="stat-label">Primary Pollutant</div>
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
 
         # Map section
-        st.markdown('<div class="section-card">', unsafe_allow_html=True)
+        st.markdown('<div class="section-card" id="data">', unsafe_allow_html=True)
         st.markdown("## Colorado Air Quality Map")
-        st.markdown('<p class="caption">Interactive map showing air quality levels across Colorado. Larger circles indicate higher pollution levels.</p>', unsafe_allow_html=True)
+        st.markdown('<p class="caption">Interactive map showing air quality levels across Colorado. Larger circles indicate higher pollution levels. Color indicates AQI category.</p>', unsafe_allow_html=True)
 
         # Map visualization
         map_data = get_map_data()
@@ -287,7 +486,7 @@ with tab1:
         # Rankings section
         st.markdown('<div class="section-card">', unsafe_allow_html=True)
         st.markdown("## Air Quality Rankings")
-        st.markdown('<p class="caption">Comparison of the most polluted and cleanest ZIP codes in Colorado based on current air quality data.</p>', unsafe_allow_html=True)
+        st.markdown('<p class="caption">Comparison of the most polluted and cleanest cities in Colorado based on current air quality data.</p>', unsafe_allow_html=True)
 
         # Rankings visualization
         show_aqi_rankings(map_data)
@@ -296,7 +495,7 @@ with tab1:
         # ZIP and pollutant selection
         st.markdown('<div class="section-card">', unsafe_allow_html=True)
         st.markdown("## Location & Pollutant Selection")
-        st.markdown('<p class="caption">Select a specific ZIP code and pollutant type to view detailed data.</p>', unsafe_allow_html=True)
+        st.markdown('<p class="caption">Select a specific ZIP code to view detailed air quality data.</p>', unsafe_allow_html=True)
 
         col1, col2 = st.columns([1, 1])
         with col1:
@@ -326,6 +525,14 @@ with tab1:
 
         plot_asthma_vs_pollution(air_data, asthma_data)
         st.markdown('</div>', unsafe_allow_html=True)
+        
+        # Footer
+        st.markdown("""
+        <div class="footer">
+            <p>© 2025 Colorado Air & Asthma Tracker | Created by Mateus</p>
+            <p>Data sources: AirNow API, CDC Asthma Data</p>
+        </div>
+        """, unsafe_allow_html=True)
 
 # About page content
 with tab2:
@@ -406,6 +613,12 @@ st.markdown("""
             link.classList.remove('active');
         });
         document.getElementById('about-link').classList.add('active');
+        
+        // Update tab links
+        document.querySelectorAll('.tab-link').forEach(link => {
+            link.classList.remove('active');
+        });
+        document.getElementById('tab-about').classList.add('active');
     }
     
     // Function to show Home section
@@ -424,6 +637,12 @@ st.markdown("""
             link.classList.remove('active');
         });
         document.getElementById('home-link').classList.add('active');
+        
+        // Update tab links
+        document.querySelectorAll('.tab-link').forEach(link => {
+            link.classList.remove('active');
+        });
+        document.getElementById('tab-home').classList.add('active');
     }
     
     // Hide the tab bar
@@ -451,19 +670,25 @@ st.markdown("""
         e.preventDefault();
         showAbout();
     });
+    
+    // Add event listener to tab links
+    document.getElementById('tab-home').addEventListener('click', function(e) {
+        e.preventDefault();
+        showHome();
+    });
+    
+    document.getElementById('tab-about').addEventListener('click', function(e) {
+        e.preventDefault();
+        showAbout();
+    });
+    
+    // Add active class to current link
+    if (currentPage === 'about') {
+        document.getElementById('about-link').classList.add('active');
+        document.getElementById('tab-about').classList.add('active');
+    } else {
+        document.getElementById('home-link').classList.add('active');
+        document.getElementById('tab-home').classList.add('active');
+    }
 </script>
-""", unsafe_allow_html=True)
-
-# Enhanced footer
-st.markdown("""
-<div class="footer">
-    <div>
-        <strong>Data Sources:</strong> AirNow API & CDC Asthma Data | 
-        <strong>Updated:</strong> Real-time | 
-        <strong>Coverage:</strong> Colorado ZIP Codes
-    </div>
-    <div style="margin-top: 0.5rem;">
-        Built for Colorado • Powered by Streamlit • © 2025
-    </div>
-</div>
 """, unsafe_allow_html=True)
