@@ -15,11 +15,64 @@ st.set_page_config(page_title="Colorado Air & Asthma Tracker", page_icon="🫁",
 # Custom CSS for styling - Streamlit-compatible approach
 st.markdown("""
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
     
     /* Base styles */
     html, body, [class*="css"], .stApp {
         font-family: 'Poppins', sans-serif !important;
+    }
+    
+    /* Reset Streamlit defaults */
+    .stApp {
+        background-color: #fff;
+    }
+    
+    .css-18e3th9, .css-1d391kg, .css-12oz5g7, .st-emotion-cache-18e3th9, .st-emotion-cache-1d391kg {
+        padding: 0 !important;
+        background-color: #fff !important;
+    }
+    
+    div[data-testid="stVerticalBlock"] {
+        background-color: #fff !important;
+    }
+    
+    .block-container {
+        padding-top: 0;
+        padding-bottom: 0;
+        max-width: 100%;
+        margin: 0 auto;
+        background-color: #fff;
+    }
+    
+    /* Typography */
+    h1 {
+        font-weight: 700;
+        font-size: 3rem;
+        margin-bottom: 1rem;
+        color: #212529;
+    }
+    
+    h2 {
+        font-weight: 600;
+        font-size: 2.25rem;
+        margin-top: 3rem;
+        margin-bottom: 1.5rem;
+        color: #212529;
+    }
+    
+    h3 {
+        font-weight: 600;
+        font-size: 1.5rem;
+        margin-top: 2rem;
+        margin-bottom: 1rem;
+        color: #212529;
+    }
+    
+    p, li {
+        font-size: 1rem;
+        line-height: 1.6;
+        color: #212529;
+        font-weight: 400;
     }
     
     /* Header styling */
@@ -27,10 +80,14 @@ st.markdown("""
         display: flex;
         justify-content: space-between;
         align-items: center;
-        padding: 1rem 0;
+        padding: 1rem 2rem;
         background-color: white;
         border-bottom: 1px solid #f0f0f0;
         margin-bottom: 2rem;
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
     }
     
     .logo-container {
@@ -39,7 +96,7 @@ st.markdown("""
     }
     
     .logo-text {
-        color: #1E88E5;
+        color: #007bff;
         font-weight: 700;
         font-size: 1.5rem;
         margin-left: 0.5rem;
@@ -54,22 +111,98 @@ st.markdown("""
         text-decoration: none;
         font-weight: 500;
         transition: color 0.3s ease;
+        padding: 0.5rem 1rem;
+        border-radius: 4px;
+    }
+    
+    .nav-link:hover {
+        background-color: rgba(0,123,255,0.1);
     }
     
     .nav-home {
-        color: #1E88E5;
+        color: #007bff;
     }
     
     .nav-about {
-        color: #7B1FA2;
+        color: #6f42c1;
     }
     
     .nav-data {
-        color: #43A047;
+        color: #28a745;
     }
     
     .nav-resources {
-        color: #FB8C00;
+        color: #fd7e14;
+    }
+    
+    .nav-home:hover {
+        color: #fff;
+        background-color: #007bff;
+    }
+    
+    .nav-about:hover {
+        color: #fff;
+        background-color: #6f42c1;
+    }
+    
+    .nav-data:hover {
+        color: #fff;
+        background-color: #28a745;
+    }
+    
+    .nav-resources:hover {
+        color: #fff;
+        background-color: #fd7e14;
+    }
+    
+    /* Theme toggle */
+    .toggle-container {
+        display: flex;
+        align-items: center;
+    }
+    
+    .toggle-box {
+        position: relative;
+        width: 60px;
+        height: 30px;
+    }
+    
+    .toggle-checkbox {
+        opacity: 0;
+        width: 0;
+        height: 0;
+    }
+    
+    .toggle-label {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        transition: .4s;
+        border-radius: 34px;
+    }
+    
+    .toggle-label:before {
+        position: absolute;
+        content: "";
+        height: 22px;
+        width: 22px;
+        left: 4px;
+        bottom: 4px;
+        background-color: white;
+        transition: .4s;
+        border-radius: 50%;
+    }
+    
+    .toggle-checkbox:checked + .toggle-label {
+        background-color: #007bff;
+    }
+    
+    .toggle-checkbox:checked + .toggle-label:before {
+        transform: translateX(30px);
     }
     
     /* Hero section */
@@ -100,7 +233,7 @@ st.markdown("""
     }
     
     .hero-button {
-        background-color: #1E88E5;
+        background-color: #007bff;
         color: white;
         padding: 0.75rem 1.5rem;
         border-radius: 5px;
@@ -110,7 +243,7 @@ st.markdown("""
     }
     
     .hero-button:hover {
-        background-color: #1565C0;
+        background-color: #0056b3;
         transform: translateY(-3px);
         box-shadow: 0 10px 20px rgba(0,0,0,0.1);
     }
@@ -142,12 +275,12 @@ st.markdown("""
     .stat-value {
         font-size: 2.5rem;
         font-weight: 700;
-        color: #1E88E5;
+        color: #007bff;
         margin-bottom: 0.5rem;
     }
     
     .stat-label {
-        color: #757575;
+        color: #6c757d;
         font-weight: 500;
     }
     
@@ -177,6 +310,12 @@ st.markdown("""
         padding: 1.5rem;
         box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         margin-bottom: 2rem;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .content-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.1);
     }
     
     /* Progress bars */
@@ -196,7 +335,7 @@ st.markdown("""
     
     .progress-value {
         font-weight: 600;
-        color: #1E88E5;
+        color: #007bff;
     }
     
     .progress-bar-bg {
@@ -213,43 +352,43 @@ st.markdown("""
     
     .progress-pm25 {
         width: 65%;
-        background-color: #1E88E5;
+        background-color: #007bff;
     }
     
     .progress-24h {
         width: 48%;
-        background-color: #1E88E5;
+        background-color: #007bff;
     }
     
     .progress-weekly {
         width: 37%;
-        background-color: #1E88E5;
+        background-color: #007bff;
     }
     
     /* Skills progress bars */
     .progress-python {
         width: 90%;
-        background-color: #1E88E5;
+        background-color: #007bff;
     }
     
     .progress-dataviz {
         width: 85%;
-        background-color: #1E88E5;
+        background-color: #007bff;
     }
     
     .progress-api {
         width: 80%;
-        background-color: #1E88E5;
+        background-color: #007bff;
     }
     
     .progress-sql {
         width: 75%;
-        background-color: #1E88E5;
+        background-color: #007bff;
     }
     
     .progress-webdev {
         width: 70%;
-        background-color: #1E88E5;
+        background-color: #007bff;
     }
     
     /* Timeline */
@@ -267,13 +406,19 @@ st.markdown("""
         box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         margin-bottom: 2rem;
         position: relative;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .timeline-item:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.1);
     }
     
     .timeline-year {
         font-weight: 600;
         font-size: 1.2rem;
         margin-bottom: 0.5rem;
-        color: #1E88E5;
+        color: #007bff;
     }
     
     /* Footer */
@@ -290,7 +435,7 @@ st.markdown("""
     
     /* Utility classes */
     .text-blue {
-        color: #1E88E5;
+        color: #007bff;
     }
     
     .text-center {
@@ -310,6 +455,35 @@ st.markdown("""
         visibility: hidden;
     }
     
+    /* Animations */
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+        }
+        to {
+            opacity: 1;
+        }
+    }
+    
+    .animate-fadeInUp {
+        animation: fadeInUp 1s ease-out;
+    }
+    
+    .animate-fadeIn {
+        animation: fadeIn 1s ease-out;
+    }
+    
     /* Responsive adjustments */
     @media (max-width: 768px) {
         .hero-title {
@@ -323,6 +497,15 @@ st.markdown("""
         .stats-container {
             flex-direction: column;
         }
+        
+        .nav-links {
+            gap: 0.5rem;
+        }
+        
+        .nav-link {
+            padding: 0.25rem 0.5rem;
+            font-size: 0.9rem;
+        }
     }
 </style>
 """, unsafe_allow_html=True)
@@ -331,7 +514,7 @@ st.markdown("""
 st.markdown("""
 <div class="header-container">
     <div class="logo-container">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#1E88E5" width="32" height="32">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#007bff" width="32" height="32">
             <path d="M12 2a1 1 0 0 1 1 1c0 .24-.103.446-.271.623A4.126 4.126 0 0 0 11 7.5V9h1c3.866 0 7 3.134 7 7v5a1 1 0 0 1-1 1h-4a1 1 0 0 1-1-1v-5a2 2 0 0 0-2-2h-2a2 2 0 0 0-2 2v5a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1v-5c0-3.866 3.134-7 7-7h1V7.5a4.126 4.126 0 0 0-1.729-3.377A1.003 1.003 0 0 1 7 3a1 1 0 0 1 1-1h4z"/>
         </svg>
         <span class="logo-text">Colorado Air & Asthma Tracker</span>
@@ -341,6 +524,12 @@ st.markdown("""
         <a href="#about" class="nav-link nav-about">About</a>
         <a href="#data" class="nav-link nav-data">Data</a>
         <a href="#resources" class="nav-link nav-resources">Resources</a>
+        <div class="toggle-container">
+            <div class="toggle-box">
+                <input type="checkbox" id="toggle-checkbox" class="toggle-checkbox">
+                <label for="toggle-checkbox" class="toggle-label"></label>
+            </div>
+        </div>
     </div>
 </div>
 """, unsafe_allow_html=True)
@@ -616,4 +805,37 @@ st.markdown("""
 <div class="footer">
     <p class="footer-text">&copy; 2025 Colorado Air & Asthma Tracker | Created by Mateus</p>
 </div>
+""", unsafe_allow_html=True)
+
+# Add JavaScript for theme toggle and animations
+st.markdown("""
+<script>
+    // Theme toggle functionality
+    const toggleCheckbox = document.getElementById('toggle-checkbox');
+    toggleCheckbox.addEventListener('change', function() {
+        if(this.checked) {
+            document.body.classList.add('dark-mode');
+            localStorage.setItem('darkMode', 'enabled');
+        } else {
+            document.body.classList.remove('dark-mode');
+            localStorage.setItem('darkMode', 'disabled');
+        }
+    });
+    
+    // Check for saved theme preference
+    if(localStorage.getItem('darkMode') === 'enabled') {
+        toggleCheckbox.checked = true;
+        document.body.classList.add('dark-mode');
+    }
+    
+    // Smooth scrolling for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            document.querySelector(this.getAttribute('href')).scrollIntoView({
+                behavior: 'smooth'
+            });
+        });
+    });
+</script>
 """, unsafe_allow_html=True)
