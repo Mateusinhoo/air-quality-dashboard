@@ -174,23 +174,15 @@ st.markdown("""
             transform: translateY(-2px);
         }
         
-        /* Updated Navigation bar styling - clean solid blue with right-aligned links */
+        /* Updated Navigation bar styling - white background with centered links */
         .nav-container {
-            background-color: #1e3a8a;
+            background-color: #ffffff;
             padding: 1rem 2rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            color: white;
             margin-bottom: 1rem;
-            border-radius: 0.5rem;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-        
-        .nav-logo-title {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
         }
         
         .nav-logo {
@@ -198,38 +190,34 @@ st.markdown("""
             height: 32px;
             cursor: pointer;
             transition: transform 0.2s;
+            color: #2563eb;
         }
         
         .nav-logo:hover {
             transform: scale(1.1);
         }
         
-        .nav-title {
-            font-weight: 700;
-            font-size: 1.5rem;
-            color: white;
-        }
-        
         .nav-links {
             display: flex;
             gap: 2rem;
+            margin: 0 auto;
         }
         
         .nav-link {
-            color: #93c5fd;
+            color: #1f2937;
             text-decoration: none;
             font-weight: 500;
             transition: all 0.2s;
+            padding: 0.5rem 1rem;
         }
         
         .nav-link:hover {
-            color: white;
-            text-decoration: underline;
+            color: #2563eb;
         }
         
         .nav-link.active {
-            color: white;
-            text-decoration: underline;
+            color: #2563eb;
+            font-weight: 600;
         }
         
         /* Colorful tab navigation inspired by portfolio site */
@@ -434,28 +422,28 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# Lung icon SVG for logo
+# Blue lung icon SVG for logo
 def get_lung_icon():
     lung_svg = """
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" width="32" height="32">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#2563eb" width="32" height="32">
         <path d="M12 2a1 1 0 0 1 1 1c0 .24-.103.446-.271.623A4.126 4.126 0 0 0 11 7.5V9h1c3.866 0 7 3.134 7 7v5a1 1 0 0 1-1 1h-4a1 1 0 0 1-1-1v-5a2 2 0 0 0-2-2h-2a2 2 0 0 0-2 2v5a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1v-5c0-3.866 3.134-7 7-7h1V7.5a4.126 4.126 0 0 0-1.729-3.377A1.003 1.003 0 0 1 7 3a1 1 0 0 1 1-1h4zm5.971 16H20v-4c0-3.314-2.686-6-6-6h-1v4.586l3.707-3.707a1 1 0 0 1 1.414 1.414l-5.828 5.828a1 1 0 0 1-1.414 0l-5.828-5.828a1 1 0 0 1 1.414-1.414L10 12.586V8H9c-3.314 0-6 2.686-6 6v4h2.971l.029-4L8 16l-.029 2H10v-5a3 3 0 0 1 3-3h1a3 3 0 0 1 3 3v5h2v-2l2-2v4z"/>
     </svg>
     """
     return lung_svg
 
-# Updated navigation with solid blue header and right-aligned links
+# Updated navigation with white background and centered links
 st.markdown(f"""
 <div class="nav-container">
-    <div class="nav-logo-title">
-        <div class="nav-logo" id="home-logo">
-            {get_lung_icon()}
-        </div>
-        <div class="nav-title">Colorado Air & Asthma Tracker</div>
+    <div class="nav-logo" id="home-logo">
+        {get_lung_icon()}
     </div>
     <div class="nav-links">
         <a href="#" class="nav-link" id="home-link">Home</a>
         <a href="#" class="nav-link" id="about-link">About</a>
+        <a href="#" class="nav-link" id="data-link">Data</a>
+        <a href="#" class="nav-link" id="resources-link">Resources</a>
     </div>
+    <div style="width: 32px;"></div> <!-- Empty div for balance -->
 </div>
 
 <div class="tab-nav">
@@ -717,6 +705,14 @@ st.markdown("""
         showAbout();
     });
     
+    // Add event listener to data link
+    document.getElementById('data-link').addEventListener('click', function(e) {
+        e.preventDefault();
+        showHome();
+        // Scroll to data section
+        document.getElementById('data').scrollIntoView({behavior: 'smooth'});
+    });
+    
     // Add event listener to tab links
     document.getElementById('tab-home').addEventListener('click', function(e) {
         e.preventDefault();
@@ -726,6 +722,13 @@ st.markdown("""
     document.getElementById('tab-about').addEventListener('click', function(e) {
         e.preventDefault();
         showAbout();
+    });
+    
+    document.getElementById('tab-data').addEventListener('click', function(e) {
+        e.preventDefault();
+        showHome();
+        // Scroll to data section
+        document.getElementById('data').scrollIntoView({behavior: 'smooth'});
     });
     
     // Add event listener to logo for home functionality
