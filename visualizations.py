@@ -3,7 +3,6 @@ import pydeck as pdk
 import pandas as pd
 import plotly.graph_objects as go
 
-
 def create_aqi_map(data):
     if not data:
         st.warning("No air quality data to display.")
@@ -34,7 +33,6 @@ def create_aqi_map(data):
         tooltip={"text": "ZIP: {zip}\nAQI: {AQI}\nPollutant: {Pollutant}"}
     ))
 
-
 def get_aqi_category(aqi):
     if aqi <= 50:
         return "Good", "#a8e05f"
@@ -49,24 +47,6 @@ def get_aqi_category(aqi):
     else:
         return "Hazardous", "#a87383"
 
-
-def show_aqi_cards(data):
-    df = pd.DataFrame(data)
-    cols = st.columns(len(df))
-    for i, row in df.iterrows():
-        category, color = get_aqi_category(row['AQI'])
-        card_html = f"""
-        <div style='background-color:{color}; padding:1rem; border-radius:1rem;
-                    text-align:center; box-shadow:0 2px 5px rgba(0,0,0,0.1);'>
-            <h3 style='margin:0;'>ZIP {row['zip']}</h3>
-            <p style='font-size:2rem; margin:0;'>{row['AQI']}</p>
-            <small>{row['Pollutant']}</small><br>
-            <span style='font-size:0.9rem;'>{category}</span>
-        </div>
-        """
-        cols[i].markdown(card_html, unsafe_allow_html=True)
-
-
 def show_aqi_rankings(data):
     df = pd.DataFrame(data)
 
@@ -74,21 +54,63 @@ def show_aqi_rankings(data):
         st.info("No data available for rankings.")
         return
 
-    most_polluted = df.sort_values(by="AQI", ascending=False).head(10)
-    cleanest = df.sort_values(by="AQI", ascending=True).head(10)
+    most_polluted = df.sort_values(by="AQI", ascending=False).head(10).reset_index(drop=True)
+    cleanest = df.sort_values(by="AQI", ascending=True).head(10).reset_index(drop=True)
 
-    col1, col2 = st.columns(2)
+    st.markdown("""
+        <style>
+            .rank-table {
+                width: 100%;
+                display: flex;
+                justify-content: space-around;
+                gap: 4rem;
+                padding: 1rem 0;
+            }
+            .rank-column {
+                background-color: #fff;
+                border-radius: 12px;
+                box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+                padding: 1rem 2rem;
+                width: 100%;
+                max-width: 500px;
+            }
+            .rank-column h4 {
+                text-align: center;
+                margin-bottom: 0.5rem;
+            }
+            .rank-row {
+                display: flex;
+                justify-content: space-between;
+                padding: 0.4rem 0;
+                border-bottom: 1px solid #eee;
+            }
+            .rank-label {
+                font-weight: 600;
+            }
+            .rank-aqi {
+                background-color: #e8f5e9;
+                padding: 0.2rem 0.6rem;
+                border-radius: 8px;
+                font-weight: bold;
+            }
+        </style>
+    """, unsafe_allow_html=True)
 
-    with col1:
-        st.markdown("### 🏴 Most Polluted ZIPs")
-        for _, row in most_polluted.iterrows():
-            st.markdown(f"**{row['city']} ({row['zip']})** — AQI: {row['AQI']} ({row['Pollutant']})")
+    st.markdown("<div class='rank-table'>", unsafe_allow_html=True)
 
-    with col2:
-        st.markdown("### 🌿 Cleanest ZIPs")
-        for _, row in cleanest.iterrows():
-            st.markdown(f"**{row['city']} ({row['zip']})** — AQI: {row['AQI']} ({row['Pollutant']})")
+    # Most Polluted Column
+    polluted_html = "<div class='rank-column'><h4>🏴 Most Polluted ZIPs</h4>"
+    for i, row in most_polluted.iterrows():
+        polluted_html += f"<div class='rank-row'><span class='rank-label'>{i+1}. {row['city']} ({row['zip']})</span><span class='rank-aqi'>{row['AQI']}</span></div>"
+    polluted_html += "</div>"
 
+    # Cleanest Column
+    clean_html = "<div class='rank-column'><h4>🌿 Cleanest ZIPs</h4>"
+    for i, row in cleanest.iterrows():
+        clean_html += f"<div class='rank-row'><span class='rank-label'>{i+1}. {row['city']} ({row['zip']})</span><span class='rank-aqi'>{row['AQI']}</span></div>"
+    clean_html += "</div>"
+
+    st.markdown(polluted_html + clean_html + "</div>", unsafe_allow_html=True)
 
 def plot_pollution_trend(data, pollutant):
     if data.empty:
@@ -116,7 +138,6 @@ def plot_pollution_trend(data, pollutant):
     )
 
     st.plotly_chart(fig, use_container_width=True)
-
 
 def plot_asthma_vs_pollution(air_data, asthma_data):
     if air_data.empty or asthma_data.empty:
