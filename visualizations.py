@@ -10,6 +10,8 @@ def create_aqi_map(data):
         return
 
     df = pd.DataFrame(data)
+    df["radius"] = df["AQI"].apply(lambda x: 4000 + x * 200)
+
     st.pydeck_chart(pdk.Deck(
         map_style="mapbox://styles/mapbox/light-v9",
         initial_view_state=pdk.ViewState(
@@ -23,10 +25,10 @@ def create_aqi_map(data):
                 "ScatterplotLayer",
                 data=df,
                 get_position='[lon, lat]',
-                get_fill_color='[255 - AQI*2, 255 - AQI, AQI]',
-                get_radius=7000,
+                get_fill_color='[255 - AQI*2, 255 - AQI, AQI, 100]',
+                get_radius="radius",
                 pickable=True,
-                opacity=0.7,
+                opacity=0.6,
             ),
         ],
         tooltip={"text": "ZIP: {zip}\nAQI: {AQI}\nPollutant: {Pollutant}"}
@@ -63,6 +65,29 @@ def show_aqi_cards(data):
         </div>
         """
         cols[i].markdown(card_html, unsafe_allow_html=True)
+
+
+def show_aqi_rankings(data):
+    df = pd.DataFrame(data)
+
+    if df.empty:
+        st.info("No data available for rankings.")
+        return
+
+    most_polluted = df.sort_values(by="AQI", ascending=False).head(10)
+    cleanest = df.sort_values(by="AQI", ascending=True).head(10)
+
+    col1, col2 = st.columns(2)
+
+    with col1:
+        st.markdown("### 🏴 Most Polluted ZIPs")
+        for _, row in most_polluted.iterrows():
+            st.markdown(f"**{row['city']} ({row['zip']})** — AQI: {row['AQI']} ({row['Pollutant']})")
+
+    with col2:
+        st.markdown("### 🌿 Cleanest ZIPs")
+        for _, row in cleanest.iterrows():
+            st.markdown(f"**{row['city']} ({row['zip']})** — AQI: {row['AQI']} ({row['Pollutant']})")
 
 
 def plot_pollution_trend(data, pollutant):
