@@ -4,6 +4,7 @@ from data_loader import get_air_quality_data, get_asthma_data, get_map_data
 from visualizations import (
     create_aqi_map,
     show_aqi_cards,
+    show_aqi_rankings,
     plot_pollution_trend,
     plot_asthma_vs_pollution
 )
@@ -58,6 +59,12 @@ st.markdown("&nbsp;", unsafe_allow_html=True)
 # AQI cards
 st.markdown("## 🧭 AQI Summary by Region")
 show_aqi_cards(map_data)
+
+# Rankings
+st.markdown("---")
+st.markdown("## 📊 Air Quality Rankings")
+show_aqi_rankings(map_data)
+
 st.markdown("---")
 
 # ZIP and pollutant selection
