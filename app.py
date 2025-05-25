@@ -395,7 +395,34 @@ st.markdown("""
             font-size: 0.875rem;
             color: #6b7280;
         }
-    </style>
+    
+/* AQI badge styling */
+.aqi-badge {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    border-radius: 1rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: white;
+    margin-left: 0.5rem;
+}
+.badge-good { background-color: #22c55e; }
+.badge-moderate { background-color: #eab308; }
+.badge-unhealthy { background-color: #ef4444; }
+.badge-very-unhealthy { background-color: #8b5cf6; }
+.badge-hazardous { background-color: #6b21a8; }
+
+/* Improved rankings grid layout */
+.rankings-container {
+    display: flex;
+    gap: 2rem;
+    flex-wrap: wrap;
+}
+.rankings-column {
+    flex: 1;
+    min-width: 300px;
+}
+</style>
 """, unsafe_allow_html=True)
 
 # Function to get Colorado background image
