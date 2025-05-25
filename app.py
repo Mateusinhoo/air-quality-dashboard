@@ -12,7 +12,7 @@ import base64
 # Page config
 st.set_page_config(page_title="Colorado Air & Asthma Tracker", page_icon="🫁", layout="wide")
 
-# Custom CSS for styling - Enhanced for a professional look with updated header
+# Custom CSS for styling - Enhanced for a professional look inspired by IQAir and portfolio site
 st.markdown("""
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
@@ -52,7 +52,6 @@ st.markdown("""
             font-size: 2.5rem;
             margin-bottom: 0.75rem;
             color: #1e3a8a;
-            text-align: center;
         }
 
         h2 {
@@ -63,7 +62,6 @@ st.markdown("""
             color: #1e3a8a;
             border-bottom: 2px solid #e5e7eb;
             padding-bottom: 0.5rem;
-            text-align: center;
         }
 
         h3 {
@@ -72,20 +70,12 @@ st.markdown("""
             margin-top: 1.5rem;
             margin-bottom: 0.75rem;
             color: #2563eb;
-            text-align: center;
         }
 
-        p, li {
+        p, li, div {
             font-size: 1rem;
             line-height: 1.6;
-            color: #1f2937;
-            text-align: center;
-        }
-        
-        div {
-            font-size: 1rem;
-            line-height: 1.6;
-            color: #1f2937;
+            color: #4b5563;
         }
 
         .stMetric {
@@ -104,7 +94,6 @@ st.markdown("""
             padding: 1.5rem;
             box-shadow: 0 4px 6px rgba(0,0,0,0.05);
             margin-bottom: 1.5rem;
-            text-align: center;
         }
 
         /* Button styling */
@@ -145,7 +134,6 @@ st.markdown("""
             color: #6b7280;
             font-style: italic;
             margin-bottom: 1rem;
-            text-align: center;
         }
 
         /* Footer styling */
@@ -167,57 +155,52 @@ st.markdown("""
             box-shadow: 0 4px 8px rgba(0,0,0,0.08);
             margin-bottom: 2rem;
             transition: transform 0.2s ease-in-out;
-            text-align: center;
         }
         
         .section-card:hover {
             transform: translateY(-2px);
         }
         
-        /* Updated Navigation bar styling - white background with centered links */
+        /* Navigation bar styling - inspired by IQAir and portfolio site */
         .nav-container {
-            background-color: #ffffff;
+            background: linear-gradient(90deg, #1e3a8a 0%, #2563eb 100%);
             padding: 1rem 2rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 1rem;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            color: white;
+            margin-bottom: 2rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
         
-        .nav-logo {
-            width: 32px;
-            height: 32px;
-            cursor: pointer;
-            transition: transform 0.2s;
-            color: #2563eb;
-        }
-        
-        .nav-logo:hover {
-            transform: scale(1.1);
+        .nav-title {
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: white;
         }
         
         .nav-links {
             display: flex;
-            gap: 2rem;
-            margin: 0 auto;
+            gap: 1rem;
         }
         
         .nav-link {
-            color: #1f2937;
+            color: white;
             text-decoration: none;
             font-weight: 500;
-            transition: all 0.2s;
             padding: 0.5rem 1rem;
+            border-radius: 0.25rem;
+            transition: all 0.2s;
         }
         
         .nav-link:hover {
-            color: #2563eb;
+            background-color: rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
         }
         
         .nav-link.active {
-            color: #2563eb;
-            font-weight: 600;
+            background-color: rgba(255, 255, 255, 0.2);
         }
         
         /* Colorful tab navigation inspired by portfolio site */
@@ -227,7 +210,6 @@ st.markdown("""
             margin-bottom: 2rem;
             overflow-x: auto;
             padding-bottom: 0.5rem;
-            justify-content: center;
         }
         
         .tab-link {
@@ -279,7 +261,6 @@ st.markdown("""
             font-weight: 700;
             margin-bottom: 1rem;
             color: white;
-            text-align: center;
         }
         
         .hero-subtitle {
@@ -287,7 +268,6 @@ st.markdown("""
             max-width: 700px;
             margin: 0 auto 2rem auto;
             color: rgba(255, 255, 255, 0.9);
-            text-align: center;
         }
         
         .hero-button {
@@ -312,13 +292,11 @@ st.markdown("""
             gap: 2rem;
             margin-bottom: 2rem;
             flex-wrap: wrap;
-            justify-content: center;
         }
         
         .about-text {
             flex: 2;
             min-width: 300px;
-            text-align: center;
         }
         
         .about-skills {
@@ -352,7 +330,6 @@ st.markdown("""
             margin-top: 0.5rem;
             font-size: 0.9rem;
             color: #0369a1;
-            text-align: center;
         }
         
         /* Fix for Streamlit info box */
@@ -367,7 +344,6 @@ st.markdown("""
             align-items: center;
             margin-bottom: 1.5rem;
             font-size: 0.875rem;
-            justify-content: center;
         }
         
         .breadcrumb-item {
@@ -422,28 +398,18 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# Blue lung icon SVG for logo
-def get_lung_icon():
-    lung_svg = """
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#2563eb" width="32" height="32">
-        <path d="M12 2a1 1 0 0 1 1 1c0 .24-.103.446-.271.623A4.126 4.126 0 0 0 11 7.5V9h1c3.866 0 7 3.134 7 7v5a1 1 0 0 1-1 1h-4a1 1 0 0 1-1-1v-5a2 2 0 0 0-2-2h-2a2 2 0 0 0-2 2v5a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1v-5c0-3.866 3.134-7 7-7h1V7.5a4.126 4.126 0 0 0-1.729-3.377A1.003 1.003 0 0 1 7 3a1 1 0 0 1 1-1h4zm5.971 16H20v-4c0-3.314-2.686-6-6-6h-1v4.586l3.707-3.707a1 1 0 0 1 1.414 1.414l-5.828 5.828a1 1 0 0 1-1.414 0l-5.828-5.828a1 1 0 0 1 1.414-1.414L10 12.586V8H9c-3.314 0-6 2.686-6 6v4h2.971l.029-4L8 16l-.029 2H10v-5a3 3 0 0 1 3-3h1a3 3 0 0 1 3 3v5h2v-2l2-2v4z"/>
-    </svg>
-    """
-    return lung_svg
+# Function to get Colorado background image
+def get_colorado_image():
+    return "https://images.unsplash.com/photo-1519501025264-65ba15a82390?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80"
 
-# Updated navigation with white background and centered links
-st.markdown(f"""
+# Navigation with colorful tabs inspired by portfolio site
+st.markdown("""
 <div class="nav-container">
-    <div class="nav-logo" id="home-logo">
-        {get_lung_icon()}
-    </div>
+    <div class="nav-title">Colorado Air & Asthma Tracker</div>
     <div class="nav-links">
         <a href="#" class="nav-link" id="home-link">Home</a>
         <a href="#" class="nav-link" id="about-link">About</a>
-        <a href="#" class="nav-link" id="data-link">Data</a>
-        <a href="#" class="nav-link" id="resources-link">Resources</a>
     </div>
-    <div style="width: 32px;"></div> <!-- Empty div for balance -->
 </div>
 
 <div class="tab-nav">
@@ -705,14 +671,6 @@ st.markdown("""
         showAbout();
     });
     
-    // Add event listener to data link
-    document.getElementById('data-link').addEventListener('click', function(e) {
-        e.preventDefault();
-        showHome();
-        // Scroll to data section
-        document.getElementById('data').scrollIntoView({behavior: 'smooth'});
-    });
-    
     // Add event listener to tab links
     document.getElementById('tab-home').addEventListener('click', function(e) {
         e.preventDefault();
@@ -722,21 +680,6 @@ st.markdown("""
     document.getElementById('tab-about').addEventListener('click', function(e) {
         e.preventDefault();
         showAbout();
-    });
-    
-    document.getElementById('tab-data').addEventListener('click', function(e) {
-        e.preventDefault();
-        showHome();
-        // Scroll to data section
-        document.getElementById('data').scrollIntoView({behavior: 'smooth'});
-    });
-    
-    // Add event listener to logo for home functionality
-    document.getElementById('home-logo').addEventListener('click', function(e) {
-        e.preventDefault();
-        showHome();
-        // Scroll to top
-        window.scrollTo({top: 0, behavior: 'smooth'});
     });
     
     // Add active class to current link
