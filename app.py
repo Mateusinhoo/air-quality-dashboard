@@ -56,8 +56,8 @@ create_aqi_map(map_data)
 st.markdown("&nbsp;", unsafe_allow_html=True)
 
 # AQI cards
-st.markdown("## 🧭 AQI Summary by Region")
-show_aqi_cards(map_data)
+# st.markdown("## 🧭 AQI Summary by Region")
+# show_aqi_cards(map_data)
 
 # Rankings
 st.markdown("---")
