@@ -2,6 +2,7 @@ import streamlit as st
 import pydeck as pdk
 import pandas as pd
 import plotly.graph_objects as go
+import base64
 
 def create_aqi_map(data):
     if not data:
@@ -47,103 +48,156 @@ def get_aqi_category(aqi):
     else:
         return "Hazardous", "#a87383"
 
+def get_aqi_color(aqi):
+    if aqi <= 50:
+        return "#a8e05f"
+    elif aqi <= 100:
+        return "#fdd74b"
+    elif aqi <= 150:
+        return "#fe9b57"
+    elif aqi <= 200:
+        return "#fe6a69"
+    elif aqi <= 300:
+        return "#a97abc"
+    else:
+        return "#a87383"
+
+def get_flag_image():
+    # US flag SVG as base64
+    flag_svg = """
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 480">
+        <defs>
+            <clipPath id="a">
+                <path fill-opacity=".7" d="M0 0h682.7v512H0z"/>
+            </clipPath>
+        </defs>
+        <g fill-rule="evenodd" clip-path="url(#a)" transform="scale(.9375)">
+            <path fill="#bd3d44" d="M0 0h972.8v39.4H0zm0 78.8h972.8v39.4H0zm0 78.7h972.8V197H0zm0 78.8h972.8v39.4H0zm0 78.8h972.8v39.4H0zm0 78.7h972.8v39.4H0zm0 78.8h972.8V512H0z"/>
+            <path fill="#fff" d="M0 39.4h972.8v39.4H0zm0 78.8h972.8v39.3H0zm0 78.7h972.8v39.4H0zm0 78.8h972.8v39.4H0zm0 78.8h972.8v39.4H0zm0 78.7h972.8v39.4H0z"/>
+            <path fill="#192f5d" d="M0 0h389.1v275.7H0z"/>
+            <path fill="#fff" d="M32.4 11.8L36 22.7h11.4l-9.2 6.7 3.5 11-9.3-6.8-9.2 6.7 3.5-10.9-9.3-6.7H29zm64.9 0l3.5 10.9h11.5l-9.3 6.7 3.5 11-9.2-6.8-9.3 6.7 3.5-10.9-9.2-6.7h11.4zm64.8 0l3.6 10.9H177l-9.2 6.7 3.5 11-9.3-6.8-9.2 6.7 3.5-10.9-9.3-6.7h11.5zm64.9 0l3.5 10.9H242l-9.3 6.7 3.6 11-9.3-6.8-9.3 6.7 3.6-10.9-9.3-6.7h11.4zm64.8 0l3.6 10.9h11.4l-9.2 6.7 3.5 11-9.3-6.8-9.2 6.7 3.5-10.9-9.2-6.7h11.4zm64.9 0l3.5 10.9h11.5l-9.3 6.7 3.6 11-9.3-6.8-9.3 6.7 3.6-10.9-9.3-6.7h11.5zM64.9 39.4l3.5 10.9h11.5L70.6 57 74 67.9l-9-6.7-9.3 6.7L59 57l-9-6.7h11.4zm64.8 0l3.6 10.9h11.4l-9.3 6.7 3.6 10.9-9.3-6.7-9.3 6.7L124 57l-9.3-6.7h11.5zm64.9 0l3.5 10.9h11.5l-9.3 6.7 3.5 10.9-9.2-6.7-9.3 6.7 3.5-10.9-9.2-6.7H191zm64.8 0l3.6 10.9h11.4l-9.3 6.7 3.6 10.9-9.3-6.7-9.2 6.7 3.5-10.9-9.3-6.7H256zm64.9 0l3.5 10.9h11.5L330 57l3.5 10.9-9.2-6.7-9.3 6.7 3.5-10.9-9.2-6.7h11.4zM32.4 66.9L36 78h11.4l-9.2 6.7 3.5 10.9-9.3-6.8-9.2 6.8 3.5-11-9.3-6.7H29zm64.9 0l3.5 11h11.5l-9.3 6.7 3.5 10.9-9.2-6.8-9.3 6.8 3.5-11-9.2-6.7h11.4zm64.8 0l3.6 11H177l-9.2 6.7 3.5 10.9-9.3-6.8-9.2 6.8 3.5-11-9.3-6.7h11.5zm64.9 0l3.5 11H242l-9.3 6.7 3.6 10.9-9.3-6.8-9.3 6.8 3.6-11-9.3-6.7h11.4zm64.8 0l3.6 11h11.4l-9.2 6.7 3.5 10.9-9.3-6.8-9.2 6.8 3.5-11-9.2-6.7h11.4zm64.9 0l3.5 11h11.5l-9.3 6.7 3.6 10.9-9.3-6.8-9.3 6.8 3.6-11-9.3-6.7h11.5zM64.9 94.5l3.5 10.9h11.5l-9.3 6.7 3.5 11-9.2-6.8-9.3 6.7 3.5-10.9-9.2-6.7h11.4zm64.8 0l3.6 10.9h11.4l-9.3 6.7 3.6 11-9.3-6.8-9.3 6.7 3.6-10.9-9.3-6.7h11.5zm64.9 0l3.5 10.9h11.5l-9.3 6.7 3.5 11-9.2-6.8-9.3 6.7 3.5-10.9-9.2-6.7H191zm64.8 0l3.6 10.9h11.4l-9.2 6.7 3.5 11-9.3-6.8-9.2 6.7 3.5-10.9-9.3-6.7H256zm64.9 0l3.5 10.9h11.5l-9.3 6.7 3.5 11-9.2-6.8-9.3 6.7 3.5-10.9-9.2-6.7h11.4zM32.4 122.1L36 133h11.4l-9.2 6.7 3.5 11-9.3-6.8-9.2 6.7 3.5-10.9-9.3-6.7H29zm64.9 0l3.5 10.9h11.5l-9.3 6.7 3.5 10.9-9.2-6.7-9.3 6.7 3.5-10.9-9.2-6.7h11.4zm64.8 0l3.6 10.9H177l-9.2 6.7 3.5 10.9-9.3-6.7-9.2 6.7 3.5-10.9-9.3-6.7h11.5zm64.9 0l3.5 10.9H242l-9.3 6.7 3.6 10.9-9.3-6.7-9.3 6.7 3.6-10.9-9.3-6.7h11.4zm64.8 0l3.6 10.9h11.4l-9.2 6.7 3.5 10.9-9.3-6.7-9.2 6.7 3.5-10.9-9.2-6.7h11.4zm64.9 0l3.5 10.9h11.5l-9.3 6.7 3.6 10.9-9.3-6.7-9.3 6.7 3.6-10.9-9.3-6.7h11.5zM64.9 149.7l3.5 10.9h11.5l-9.3 6.7 3.5 10.9-9.2-6.8-9.3 6.8 3.5-11-9.2-6.7h11.4zm64.8 0l3.6 10.9h11.4l-9.3 6.7 3.6 10.9-9.3-6.8-9.3 6.8 3.6-11-9.3-6.7h11.5zm64.9 0l3.5 10.9h11.5l-9.3 6.7 3.5 10.9-9.2-6.8-9.3 6.8 3.5-11-9.2-6.7H191zm64.8 0l3.6 10.9h11.4l-9.2 6.7 3.5 10.9-9.3-6.8-9.2 6.8 3.5-11-9.3-6.7H256zm64.9 0l3.5 10.9h11.5l-9.3 6.7 3.5 10.9-9.2-6.8-9.3 6.8 3.5-11-9.2-6.7h11.4zM32.4 177.2l3.6 11h11.4l-9.2 6.7 3.5 10.8-9.3-6.7-9.2 6.7 3.5-10.9-9.3-6.7H29zm64.9 0l3.5 11h11.5l-9.3 6.7 3.6 10.8-9.3-6.7-9.3 6.7 3.6-10.9-9.3-6.7h11.4zm64.8 0l3.6 11H177l-9.2 6.7 3.5 10.8-9.3-6.7-9.2 6.7 3.5-10.9-9.3-6.7h11.5zm64.9 0l3.5 11H242l-9.3 6.7 3.6 10.8-9.3-6.7-9.3 6.7 3.6-10.9-9.3-6.7h11.4zm64.8 0l3.6 11h11.4l-9.2 6.7 3.5 10.8-9.3-6.7-9.2 6.7 3.5-10.9-9.2-6.7h11.4zm64.9 0l3.5 11h11.5l-9.3 6.7 3.6 10.8-9.3-6.7-9.3 6.7 3.6-10.9-9.3-6.7h11.5zM64.9 204.8l3.5 10.9h11.5l-9.3 6.7 3.5 11-9.2-6.8-9.3 6.7 3.5-10.9-9.2-6.7h11.4zm64.8 0l3.6 10.9h11.4l-9.3 6.7 3.6 11-9.3-6.8-9.3 6.7 3.6-10.9-9.3-6.7h11.5zm64.9 0l3.5 10.9h11.5l-9.3 6.7 3.5 11-9.2-6.8-9.3 6.7 3.5-10.9-9.2-6.7H191zm64.8 0l3.6 10.9h11.4l-9.2 6.7 3.5 11-9.3-6.8-9.2 6.7 3.5-10.9-9.3-6.7H256zm64.9 0l3.5 10.9h11.5l-9.3 6.7 3.5 11-9.2-6.8-9.3 6.7 3.5-10.9-9.2-6.7h11.4zM32.4 232.4l3.6 10.9h11.4l-9.2 6.7 3.5 10.9-9.3-6.7-9.2 6.7 3.5-11-9.3-6.7H29zm64.9 0l3.5 10.9h11.5L103 250l3.6 10.9-9.3-6.7-9.3 6.7 3.6-11-9.3-6.7h11.4zm64.8 0l3.6 10.9H177l-9 6.7 3.5 10.9-9.3-6.7-9.2 6.7 3.5-11-9.3-6.7h11.5zm64.9 0l3.5 10.9H242l-9.3 6.7 3.6 10.9-9.3-6.7-9.3 6.7 3.6-11-9.3-6.7h11.4zm64.8 0l3.6 10.9h11.4l-9.2 6.7 3.5 10.9-9.3-6.7-9.2 6.7 3.5-11-9.2-6.7h11.4zm64.9 0l3.5 10.9h11.5l-9.3 6.7 3.6 10.9-9.3-6.7-9.3 6.7 3.6-11-9.3-6.7h11.5z"/>
+        </g>
+    </svg>
+    """
+    encoded_flag = base64.b64encode(flag_svg.encode('utf-8')).decode('utf-8')
+    return f"data:image/svg+xml;base64,{encoded_flag}"
+
 def show_aqi_rankings(data):
-    df = pd.DataFrame(data)
+    try:
+        df = pd.DataFrame(data)
 
-    if df.empty:
-        st.info("No data available for rankings.")
-        return
+        if df.empty:
+            st.info("No data available for rankings.")
+            return
 
-    most_polluted = df.sort_values(by="AQI", ascending=False).head(10).reset_index(drop=True)
-    cleanest = df.sort_values(by="AQI", ascending=True).head(10).reset_index(drop=True)
-
-    st.markdown("""
+        most_polluted = df.sort_values(by="AQI", ascending=False).head(10).reset_index(drop=True)
+        cleanest = df.sort_values(by="AQI", ascending=True).head(10).reset_index(drop=True)
+        
+        # Custom CSS for professional styling
+        st.markdown("""
         <style>
-            .rank-wrapper {
-                display: flex;
-                justify-content: center;
-                align-items: flex-start;
-                gap: 60px;
-                margin-top: 2rem;
-                margin-bottom: 2rem;
-                flex-wrap: wrap;
-            }
-            .rank-box {
-                background-color: #1e1e1e;
-                border-radius: 12px;
-                padding: 1.5rem 2rem;
-                width: 360px;
-                box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-            }
-            .rank-box h4 {
-                text-align: center;
-                margin-bottom: 1.2rem;
-                color: #fff;
-                font-size: 1.25rem;
-            }
-            .rank-row {
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                padding: 0.5rem 0;
-                color: #eee;
-                font-size: 0.95rem;
-                border-bottom: 1px solid #333;
-            }
-            .rank-label {
-                font-weight: 500;
-                display: flex;
-                align-items: center;
-                gap: 0.4rem;
-            }
-            .rank-aqi {
-                padding: 0.3rem 0.7rem;
-                border-radius: 8px;
-                font-weight: bold;
-                font-size: 0.9rem;
-            }
+        .ranking-card {
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+        }
+        
+        .ranking-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1e3a8a;
+            margin-bottom: 5px;
+        }
+        
+        .ranking-subtitle {
+            font-size: 14px;
+            color: #6b7280;
+            margin-bottom: 15px;
+        }
+        
+        .aqi-badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-weight: 600;
+            text-align: center;
+            min-width: 40px;
+            color: #1f2937;
+        }
+        
+        .flag-icon {
+            width: 20px;
+            height: 14px;
+            margin-right: 8px;
+            vertical-align: middle;
+        }
         </style>
-    """, unsafe_allow_html=True)
-
-    def get_color(aqi):
-        if aqi <= 50:
-            return "#a8e05f"
-        elif aqi <= 100:
-            return "#fdd74b"
-        elif aqi <= 150:
-            return "#fe9b57"
-        elif aqi <= 200:
-            return "#fe6a69"
-        elif aqi <= 300:
-            return "#a97abc"
-        else:
-            return "#a87383"
-
-    col1, col2 = st.columns(2)
-
-    with col1:
-        st.markdown("<div class='rank-box'><h4>🏴 Most Polluted ZIPs</h4>", unsafe_allow_html=True)
-        for i, row in most_polluted.iterrows():
-            color = get_color(row['AQI'])
-            st.markdown(f"""
-                <div class='rank-row'>
-                    <span class='rank-label'>🇺🇸 {i+1}. {row['city']} ({row['zip']})</span>
-                    <span class='rank-aqi' style='background-color:{color}; color:#000;'>{row['AQI']}</span>
+        """, unsafe_allow_html=True)
+        
+        # Get flag image
+        flag_img = get_flag_image()
+        
+        # Use Streamlit columns for layout
+        col1, col2 = st.columns(2)
+        
+        with col1:
+            st.markdown('<div class="ranking-card">', unsafe_allow_html=True)
+            st.markdown('<div class="ranking-title">Live most polluted city ranking</div>', unsafe_allow_html=True)
+            st.markdown('<div class="ranking-subtitle">Real-time Colorado most polluted city ranking</div>', unsafe_allow_html=True)
+            
+            # Create a clean dataframe for display
+            for i, row in most_polluted.iterrows():
+                aqi = row['AQI']
+                aqi_color = get_aqi_color(aqi)
+                
+                # Create a row with flag icon and colored AQI badge
+                st.markdown(f"""
+                <div style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #f3f4f6;">
+                    <div style="width: 30px; text-align: left;">{i+1}</div>
+                    <div style="flex-grow: 1; display: flex; align-items: center;">
+                        <img src="{flag_img}" class="flag-icon">
+                        {row['city']} ({row['zip']})
+                    </div>
+                    <div>
+                        <span class="aqi-badge" style="background-color: {aqi_color};">{aqi}</span>
+                    </div>
                 </div>
-            """, unsafe_allow_html=True)
-        st.markdown("</div>", unsafe_allow_html=True)
-
-    with col2:
-        st.markdown("<div class='rank-box'><h4>🌿 Cleanest ZIPs</h4>", unsafe_allow_html=True)
-        for i, row in cleanest.iterrows():
-            color = get_color(row['AQI'])
-            st.markdown(f"""
-                <div class='rank-row'>
-                    <span class='rank-label'>🇺🇸 {i+1}. {row['city']} ({row['zip']})</span>
-                    <span class='rank-aqi' style='background-color:{color}; color:#000;'>{row['AQI']}</span>
+                """, unsafe_allow_html=True)
+            
+            st.markdown('</div>', unsafe_allow_html=True)
+        
+        with col2:
+            st.markdown('<div class="ranking-card">', unsafe_allow_html=True)
+            st.markdown('<div class="ranking-title">Live cleanest city ranking</div>', unsafe_allow_html=True)
+            st.markdown('<div class="ranking-subtitle">Real-time Colorado cleanest city ranking</div>', unsafe_allow_html=True)
+            
+            # Create a clean dataframe for display
+            for i, row in cleanest.iterrows():
+                aqi = row['AQI']
+                aqi_color = get_aqi_color(aqi)
+                
+                # Create a row with flag icon and colored AQI badge
+                st.markdown(f"""
+                <div style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #f3f4f6;">
+                    <div style="width: 30px; text-align: left;">{i+1}</div>
+                    <div style="flex-grow: 1; display: flex; align-items: center;">
+                        <img src="{flag_img}" class="flag-icon">
+                        {row['city']} ({row['zip']})
+                    </div>
+                    <div>
+                        <span class="aqi-badge" style="background-color: {aqi_color};">{aqi}</span>
+                    </div>
                 </div>
-            """, unsafe_allow_html=True)
-        st.markdown("</div>", unsafe_allow_html=True)
+                """, unsafe_allow_html=True)
+            
+            st.markdown('</div>', unsafe_allow_html=True)
+        
+    except Exception as e:
+        st.error(f"Error displaying rankings: {e}")
+        import traceback
+        st.text(traceback.format_exc())
 
 def plot_pollution_trend(data, pollutant):
     if data.empty:
