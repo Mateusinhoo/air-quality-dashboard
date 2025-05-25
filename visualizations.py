@@ -59,27 +59,27 @@ def show_aqi_rankings(data):
 
     st.markdown("""
         <style>
-            .rank-section {
+            .rank-wrapper {
                 display: flex;
                 justify-content: center;
                 align-items: flex-start;
-                gap: 3rem;
+                gap: 60px;
+                margin-top: 2rem;
+                margin-bottom: 2rem;
                 flex-wrap: wrap;
-                padding-top: 1rem;
             }
             .rank-box {
-                background-color: #ffffff10;
-                border: 1px solid #444;
+                background-color: #1e1e1e;
                 border-radius: 12px;
-                padding: 1rem 2rem;
-                width: 320px;
+                padding: 1.5rem 2rem;
+                width: 350px;
                 box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
             }
             .rank-box h4 {
                 text-align: center;
-                margin-bottom: 1rem;
+                margin-bottom: 1.2rem;
                 color: #fff;
-                font-size: 1.2rem;
+                font-size: 1.25rem;
             }
             .rank-row {
                 display: flex;
@@ -100,9 +100,8 @@ def show_aqi_rankings(data):
                 font-weight: bold;
             }
         </style>
+        <div class='rank-wrapper'>
     """, unsafe_allow_html=True)
-
-    st.markdown("<div class='rank-section'>", unsafe_allow_html=True)
 
     polluted_html = "<div class='rank-box'><h4>🏴 Most Polluted ZIPs</h4>"
     for i, row in most_polluted.iterrows():
@@ -112,9 +111,9 @@ def show_aqi_rankings(data):
     clean_html = "<div class='rank-box'><h4>🌿 Cleanest ZIPs</h4>"
     for i, row in cleanest.iterrows():
         clean_html += f"<div class='rank-row'><span class='rank-label'>{i+1}. {row['city']} ({row['zip']})</span><span class='rank-aqi'>{row['AQI']}</span></div>"
-    clean_html += "</div>"
+    clean_html += "</div></div>"
 
-    st.markdown(polluted_html + clean_html + "</div>", unsafe_allow_html=True)
+    st.markdown(polluted_html + clean_html, unsafe_allow_html=True)
 
 def plot_pollution_trend(data, pollutant):
     if data.empty:
