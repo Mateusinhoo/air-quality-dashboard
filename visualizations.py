@@ -103,7 +103,6 @@ def show_aqi_rankings(data):
                 font-size: 0.9rem;
             }
         </style>
-        <div class='rank-wrapper'>
     """, unsafe_allow_html=True)
 
     def get_color(aqi):
@@ -120,29 +119,31 @@ def show_aqi_rankings(data):
         else:
             return "#a87383"
 
-    polluted_html = "<div class='rank-box'><h4>🏴 Most Polluted ZIPs</h4>"
-    for i, row in most_polluted.iterrows():
-        color = get_color(row['AQI'])
-        polluted_html += f"""
-        <div class='rank-row'>
-            <span class='rank-label'>🇺🇸 {i+1}. {row['city']} ({row['zip']})</span>
-            <span class='rank-aqi' style='background-color:{color}; color:#000;'>{row['AQI']}</span>
-        </div>
-        """
-    polluted_html += "</div>"
+    col1, col2 = st.columns(2)
 
-    clean_html = "<div class='rank-box'><h4>🌿 Cleanest ZIPs</h4>"
-    for i, row in cleanest.iterrows():
-        color = get_color(row['AQI'])
-        clean_html += f"""
-        <div class='rank-row'>
-            <span class='rank-label'>🇺🇸 {i+1}. {row['city']} ({row['zip']})</span>
-            <span class='rank-aqi' style='background-color:{color}; color:#000;'>{row['AQI']}</span>
-        </div>
-        """
-    clean_html += "</div></div>"
+    with col1:
+        st.markdown("<div class='rank-box'><h4>🏴 Most Polluted ZIPs</h4>", unsafe_allow_html=True)
+        for i, row in most_polluted.iterrows():
+            color = get_color(row['AQI'])
+            st.markdown(f"""
+                <div class='rank-row'>
+                    <span class='rank-label'>🇺🇸 {i+1}. {row['city']} ({row['zip']})</span>
+                    <span class='rank-aqi' style='background-color:{color}; color:#000;'>{row['AQI']}</span>
+                </div>
+            """, unsafe_allow_html=True)
+        st.markdown("</div>", unsafe_allow_html=True)
 
-    st.markdown(polluted_html + clean_html, unsafe_allow_html=True)
+    with col2:
+        st.markdown("<div class='rank-box'><h4>🌿 Cleanest ZIPs</h4>", unsafe_allow_html=True)
+        for i, row in cleanest.iterrows():
+            color = get_color(row['AQI'])
+            st.markdown(f"""
+                <div class='rank-row'>
+                    <span class='rank-label'>🇺🇸 {i+1}. {row['city']} ({row['zip']})</span>
+                    <span class='rank-aqi' style='background-color:{color}; color:#000;'>{row['AQI']}</span>
+                </div>
+            """, unsafe_allow_html=True)
+        st.markdown("</div>", unsafe_allow_html=True)
 
 def plot_pollution_trend(data, pollutant):
     if data.empty:
