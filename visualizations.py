@@ -10,6 +10,9 @@ def create_aqi_map(data):
         return
 
     df = pd.DataFrame(data)
+    
+    # Enhanced color mapping based on AQI values - matching IQAir standards
+    df["color"] = df["AQI"].apply(lambda x: get_aqi_color_rgb(x))
     df["radius"] = df["AQI"].apply(lambda x: 4000 + x * 200)
 
     st.pydeck_chart(pdk.Deck(
@@ -25,14 +28,46 @@ def create_aqi_map(data):
                 "ScatterplotLayer",
                 data=df,
                 get_position='[lon, lat]',
-                get_fill_color='[255 - AQI*2, 255 - AQI, AQI, 100]',
+                get_fill_color='color',
                 get_radius="radius",
                 pickable=True,
-                opacity=0.6,
+                opacity=0.7,
+                stroked=True,
+                filled=True,
             ),
         ],
-        tooltip={"text": "ZIP: {zip}\nAQI: {AQI}\nPollutant: {Pollutant}"}
+        tooltip={"text": "City: {city}\nZIP: {zip}\nAQI: {AQI}\nPollutant: {Pollutant}"}
     ))
+    
+    # Add color legend for AQI values
+    st.markdown("""
+    <div style="display: flex; justify-content: center; margin-top: 10px; flex-wrap: wrap;">
+        <div style="display: flex; align-items: center; margin: 0 10px;">
+            <div style="width: 15px; height: 15px; background-color: #a8e05f; border-radius: 3px; margin-right: 5px;"></div>
+            <span style="font-size: 12px;">Good</span>
+        </div>
+        <div style="display: flex; align-items: center; margin: 0 10px;">
+            <div style="width: 15px; height: 15px; background-color: #fdd74b; border-radius: 3px; margin-right: 5px;"></div>
+            <span style="font-size: 12px;">Moderate</span>
+        </div>
+        <div style="display: flex; align-items: center; margin: 0 10px;">
+            <div style="width: 15px; height: 15px; background-color: #fe9b57; border-radius: 3px; margin-right: 5px;"></div>
+            <span style="font-size: 12px;">Unhealthy for Sensitive</span>
+        </div>
+        <div style="display: flex; align-items: center; margin: 0 10px;">
+            <div style="width: 15px; height: 15px; background-color: #fe6a69; border-radius: 3px; margin-right: 5px;"></div>
+            <span style="font-size: 12px;">Unhealthy</span>
+        </div>
+        <div style="display: flex; align-items: center; margin: 0 10px;">
+            <div style="width: 15px; height: 15px; background-color: #a97abc; border-radius: 3px; margin-right: 5px;"></div>
+            <span style="font-size: 12px;">Very Unhealthy</span>
+        </div>
+        <div style="display: flex; align-items: center; margin: 0 10px;">
+            <div style="width: 15px; height: 15px; background-color: #a87383; border-radius: 3px; margin-right: 5px;"></div>
+            <span style="font-size: 12px;">Hazardous</span>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
 
 def get_aqi_category(aqi):
     if aqi <= 50:
@@ -61,6 +96,20 @@ def get_aqi_color(aqi):
         return "#a97abc"
     else:
         return "#a87383"
+
+def get_aqi_color_rgb(aqi):
+    if aqi <= 50:
+        return [168, 224, 95]
+    elif aqi <= 100:
+        return [253, 215, 75]
+    elif aqi <= 150:
+        return [254, 155, 87]
+    elif aqi <= 200:
+        return [254, 106, 105]
+    elif aqi <= 300:
+        return [169, 122, 188]
+    else:
+        return [168, 115, 131]
 
 def get_flag_image():
     # US flag SVG as base64
@@ -93,14 +142,14 @@ def show_aqi_rankings(data):
         most_polluted = df.sort_values(by="AQI", ascending=False).head(10).reset_index(drop=True)
         cleanest = df.sort_values(by="AQI", ascending=True).head(10).reset_index(drop=True)
         
-        # Custom CSS for professional styling
+        # Custom CSS for professional styling - enhanced to match IQAir
         st.markdown("""
         <style>
         .ranking-card {
             background-color: white;
-            border-radius: 8px;
+            border-radius: 10px;
             padding: 20px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.08);
             margin-bottom: 20px;
         }
         
@@ -119,8 +168,8 @@ def show_aqi_rankings(data):
         
         .aqi-badge {
             display: inline-block;
-            padding: 4px 8px;
-            border-radius: 6px;
+            padding: 4px 10px;
+            border-radius: 4px;
             font-weight: 600;
             text-align: center;
             min-width: 40px;
@@ -132,6 +181,35 @@ def show_aqi_rankings(data):
             height: 14px;
             margin-right: 8px;
             vertical-align: middle;
+        }
+        
+        .ranking-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #f3f4f6;
+            align-items: center;
+        }
+        
+        .ranking-row:hover {
+            background-color: #f9fafb;
+        }
+        
+        .ranking-number {
+            width: 30px;
+            text-align: center;
+            font-weight: 500;
+        }
+        
+        .ranking-city {
+            flex-grow: 1;
+            display: flex;
+            align-items: center;
+            font-weight: 500;
+        }
+        
+        .ranking-aqi {
+            padding-left: 10px;
         }
         </style>
         """, unsafe_allow_html=True)
@@ -151,17 +229,18 @@ def show_aqi_rankings(data):
             for i, row in most_polluted.iterrows():
                 aqi = row['AQI']
                 aqi_color = get_aqi_color(aqi)
+                category, _ = get_aqi_category(aqi)
                 
                 # Create a row with flag icon and colored AQI badge
                 st.markdown(f"""
-                <div style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #f3f4f6;">
-                    <div style="width: 30px; text-align: left;">{i+1}</div>
-                    <div style="flex-grow: 1; display: flex; align-items: center;">
-                        <img src="{flag_img}" class="flag-icon">
+                <div class="ranking-row">
+                    <div class="ranking-number">{i+1}</div>
+                    <div class="ranking-city">
+                        <img src="{flag_img}" class="flag-icon" alt="US Flag">
                         {row['city']} ({row['zip']})
                     </div>
-                    <div>
-                        <span class="aqi-badge" style="background-color: {aqi_color};">{aqi}</span>
+                    <div class="ranking-aqi">
+                        <span class="aqi-badge" style="background-color: {aqi_color};" title="{category}">{aqi}</span>
                     </div>
                 </div>
                 """, unsafe_allow_html=True)
@@ -177,17 +256,18 @@ def show_aqi_rankings(data):
             for i, row in cleanest.iterrows():
                 aqi = row['AQI']
                 aqi_color = get_aqi_color(aqi)
+                category, _ = get_aqi_category(aqi)
                 
                 # Create a row with flag icon and colored AQI badge
                 st.markdown(f"""
-                <div style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #f3f4f6;">
-                    <div style="width: 30px; text-align: left;">{i+1}</div>
-                    <div style="flex-grow: 1; display: flex; align-items: center;">
-                        <img src="{flag_img}" class="flag-icon">
+                <div class="ranking-row">
+                    <div class="ranking-number">{i+1}</div>
+                    <div class="ranking-city">
+                        <img src="{flag_img}" class="flag-icon" alt="US Flag">
                         {row['city']} ({row['zip']})
                     </div>
-                    <div>
-                        <span class="aqi-badge" style="background-color: {aqi_color};">{aqi}</span>
+                    <div class="ranking-aqi">
+                        <span class="aqi-badge" style="background-color: {aqi_color};" title="{category}">{aqi}</span>
                     </div>
                 </div>
                 """, unsafe_allow_html=True)
@@ -211,17 +291,32 @@ def plot_pollution_trend(data, pollutant):
         y=data["Value"],
         mode="lines+markers",
         name=f"{pollutant} Level",
-        line=dict(color="#1976d2", width=3)
+        line=dict(color="#1976d2", width=3),
+        marker=dict(size=8, color="#1976d2", line=dict(width=1, color="#ffffff"))
     ))
 
     fig.update_layout(
-        height=300,
+        height=350,
         title=f"{pollutant} Trend Over Time",
         margin=dict(l=20, r=20, t=40, b=20),
         paper_bgcolor="white",
-        plot_bgcolor="#f0f2f6",
-        font=dict(size=13, color="#333"),
-        showlegend=True
+        plot_bgcolor="#f8fafc",
+        font=dict(family="Inter, sans-serif", size=13, color="#333"),
+        showlegend=True,
+        legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
+        xaxis=dict(
+            title="Date",
+            gridcolor="#e5e7eb",
+            showgrid=True,
+            zeroline=False
+        ),
+        yaxis=dict(
+            title=f"{pollutant} Value (μg/m³)",
+            gridcolor="#e5e7eb",
+            showgrid=True,
+            zeroline=False
+        ),
+        hovermode="x unified"
     )
 
     st.plotly_chart(fig, use_container_width=True)
@@ -239,8 +334,9 @@ def plot_asthma_vs_pollution(air_data, asthma_data):
         x=air_data["Date"],
         y=air_data["Value"],
         mode="lines+markers",
-        name="Pollution Level",
-        line=dict(color="#1976d2", width=3)
+        name="PM2.5 Level",
+        line=dict(color="#1976d2", width=3),
+        marker=dict(size=8, color="#1976d2", line=dict(width=1, color="#ffffff"))
     ))
 
     fig.add_trace(go.Scatter(
@@ -248,17 +344,31 @@ def plot_asthma_vs_pollution(air_data, asthma_data):
         y=[asthma_rate] * len(air_data),
         mode="lines",
         name=f"Asthma Rate ({asthma_rate}%)",
-        line=dict(color="#d32f2f", dash="dash")
+        line=dict(color="#d32f2f", width=2, dash="dash")
     ))
 
     fig.update_layout(
-        height=300,
-        title="Pollution vs Asthma Rate",
+        height=350,
+        title="PM2.5 Pollution vs Asthma Rate",
         margin=dict(l=20, r=20, t=40, b=20),
         paper_bgcolor="white",
-        plot_bgcolor="#f0f2f6",
-        font=dict(size=13, color="#333"),
-        showlegend=True
+        plot_bgcolor="#f8fafc",
+        font=dict(family="Inter, sans-serif", size=13, color="#333"),
+        showlegend=True,
+        legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
+        xaxis=dict(
+            title="Date",
+            gridcolor="#e5e7eb",
+            showgrid=True,
+            zeroline=False
+        ),
+        yaxis=dict(
+            title="Value",
+            gridcolor="#e5e7eb",
+            showgrid=True,
+            zeroline=False
+        ),
+        hovermode="x unified"
     )
 
     st.plotly_chart(fig, use_container_width=True)
