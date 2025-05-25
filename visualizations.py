@@ -59,36 +59,42 @@ def show_aqi_rankings(data):
 
     st.markdown("""
         <style>
-            .rank-table {
-                width: 100%;
+            .rank-section {
                 display: flex;
-                justify-content: space-around;
-                gap: 4rem;
-                padding: 1rem 0;
+                justify-content: center;
+                align-items: flex-start;
+                gap: 3rem;
+                flex-wrap: wrap;
+                padding-top: 1rem;
             }
-            .rank-column {
-                background-color: #fff;
+            .rank-box {
+                background-color: #ffffff10;
+                border: 1px solid #444;
                 border-radius: 12px;
-                box-shadow: 0 1px 4px rgba(0,0,0,0.1);
                 padding: 1rem 2rem;
-                width: 100%;
-                max-width: 500px;
+                width: 320px;
+                box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
             }
-            .rank-column h4 {
+            .rank-box h4 {
                 text-align: center;
-                margin-bottom: 0.5rem;
+                margin-bottom: 1rem;
+                color: #fff;
+                font-size: 1.2rem;
             }
             .rank-row {
                 display: flex;
                 justify-content: space-between;
-                padding: 0.4rem 0;
-                border-bottom: 1px solid #eee;
+                padding: 0.5rem 0;
+                color: #eee;
+                font-size: 0.95rem;
+                border-bottom: 1px solid #333;
             }
             .rank-label {
-                font-weight: 600;
+                font-weight: 500;
             }
             .rank-aqi {
-                background-color: #e8f5e9;
+                background-color: #3fcf8e;
+                color: #111;
                 padding: 0.2rem 0.6rem;
                 border-radius: 8px;
                 font-weight: bold;
@@ -96,16 +102,14 @@ def show_aqi_rankings(data):
         </style>
     """, unsafe_allow_html=True)
 
-    st.markdown("<div class='rank-table'>", unsafe_allow_html=True)
+    st.markdown("<div class='rank-section'>", unsafe_allow_html=True)
 
-    # Most Polluted Column
-    polluted_html = "<div class='rank-column'><h4>🏴 Most Polluted ZIPs</h4>"
+    polluted_html = "<div class='rank-box'><h4>🏴 Most Polluted ZIPs</h4>"
     for i, row in most_polluted.iterrows():
         polluted_html += f"<div class='rank-row'><span class='rank-label'>{i+1}. {row['city']} ({row['zip']})</span><span class='rank-aqi'>{row['AQI']}</span></div>"
     polluted_html += "</div>"
 
-    # Cleanest Column
-    clean_html = "<div class='rank-column'><h4>🌿 Cleanest ZIPs</h4>"
+    clean_html = "<div class='rank-box'><h4>🌿 Cleanest ZIPs</h4>"
     for i, row in cleanest.iterrows():
         clean_html += f"<div class='rank-row'><span class='rank-label'>{i+1}. {row['city']} ({row['zip']})</span><span class='rank-aqi'>{row['AQI']}</span></div>"
     clean_html += "</div>"
