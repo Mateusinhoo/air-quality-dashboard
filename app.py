@@ -24,6 +24,17 @@ st.markdown("""
         .stApp {
             background-color: #f8fafc;
         }
+        
+        /* Remove white strips/boxes */
+        .css-18e3th9, .css-1d391kg, .css-12oz5g7 {
+            padding: 0 !important;
+            background-color: #f8fafc !important;
+        }
+        
+        /* Ensure consistent background for all elements */
+        .st-emotion-cache-18e3th9, .st-emotion-cache-1d391kg {
+            background-color: #f8fafc !important;
+        }
 
         .block-container {
             padding-top: 2rem;
@@ -32,6 +43,7 @@ st.markdown("""
             padding-right: 2.5rem;
             max-width: 1200px;
             margin: 0 auto;
+            background-color: #f8fafc;
         }
 
         h1 {
@@ -131,6 +143,7 @@ st.markdown("""
             color: #6b7280;
             border-top: 1px solid #e5e7eb;
             margin-top: 3rem;
+            background-color: #f8fafc;
         }
         
         /* Section card styling - with consistent background */
@@ -213,6 +226,23 @@ st.markdown("""
             border-radius: 50%;
             margin-right: 0.75rem;
         }
+        
+        /* PM2.5 info styling - integrated into the UI */
+        .pm25-info {
+            background-color: #f0f9ff;
+            border-left: 4px solid #0ea5e9;
+            padding: 0.75rem 1rem;
+            border-radius: 0 0.5rem 0.5rem 0;
+            margin-top: 0.5rem;
+            font-size: 0.9rem;
+            color: #0369a1;
+        }
+        
+        /* Fix for Streamlit info box */
+        .stAlert {
+            background-color: #f0f9ff !important;
+            border-left-color: #0ea5e9 !important;
+        }
     </style>
 """, unsafe_allow_html=True)
 
@@ -221,8 +251,8 @@ st.markdown("""
 <div class="nav-container">
     <div class="nav-title">Colorado Air & Asthma Tracker</div>
     <div class="nav-links">
-        <a href="?page=home" class="nav-link active" id="home-link">Home</a>
-        <a href="?page=about" class="nav-link" id="about-link">About</a>
+        <a href="/" class="nav-link" id="home-link">Home</a>
+        <a href="#" onclick="showAbout(); return false;" class="nav-link" id="about-link">About</a>
     </div>
 </div>
 """, unsafe_allow_html=True)
@@ -231,136 +261,196 @@ st.markdown("""
 query_params = st.query_params
 page = query_params.get("page", "home")
 
+# Create tabs for Home and About, but hide the tab bar
+tab1, tab2 = st.tabs(["Home", "About"])
+
 # Home page content
-if page == "home":
-    # Title and intro
-    st.markdown("# Colorado Air & Asthma Tracker")
-    st.markdown("Explore real-time air quality across Colorado ZIP codes and how it correlates with asthma.")
+with tab1:
+    if page == "about":
+        # If page is about, we'll show the about content in tab2
+        pass
+    else:
+        # Title and intro
+        st.markdown("# Colorado Air & Asthma Tracker")
+        st.markdown("Explore real-time air quality across Colorado ZIP codes and how it correlates with asthma.")
 
-    # Map section
-    st.markdown('<div class="section-card">', unsafe_allow_html=True)
-    st.markdown("## Colorado Air Quality Map")
-    st.markdown('<p class="caption">Interactive map showing air quality levels across Colorado. Larger circles indicate higher pollution levels.</p>', unsafe_allow_html=True)
+        # Map section
+        st.markdown('<div class="section-card">', unsafe_allow_html=True)
+        st.markdown("## Colorado Air Quality Map")
+        st.markdown('<p class="caption">Interactive map showing air quality levels across Colorado. Larger circles indicate higher pollution levels.</p>', unsafe_allow_html=True)
 
-    # Map visualization
-    map_data = get_map_data()
-    create_aqi_map(map_data)
-    st.markdown('</div>', unsafe_allow_html=True)
+        # Map visualization
+        map_data = get_map_data()
+        create_aqi_map(map_data)
+        st.markdown('</div>', unsafe_allow_html=True)
 
-    # Rankings section
-    st.markdown('<div class="section-card">', unsafe_allow_html=True)
-    st.markdown("## Air Quality Rankings")
-    st.markdown('<p class="caption">Comparison of the most polluted and cleanest ZIP codes in Colorado based on current air quality data.</p>', unsafe_allow_html=True)
+        # Rankings section
+        st.markdown('<div class="section-card">', unsafe_allow_html=True)
+        st.markdown("## Air Quality Rankings")
+        st.markdown('<p class="caption">Comparison of the most polluted and cleanest ZIP codes in Colorado based on current air quality data.</p>', unsafe_allow_html=True)
 
-    # Rankings visualization
-    show_aqi_rankings(map_data)
-    st.markdown('</div>', unsafe_allow_html=True)
+        # Rankings visualization
+        show_aqi_rankings(map_data)
+        st.markdown('</div>', unsafe_allow_html=True)
 
-    # ZIP and pollutant selection
-    st.markdown('<div class="section-card">', unsafe_allow_html=True)
-    st.markdown("## Location & Pollutant Selection")
-    st.markdown('<p class="caption">Select a specific ZIP code and pollutant type to view detailed data.</p>', unsafe_allow_html=True)
+        # ZIP and pollutant selection
+        st.markdown('<div class="section-card">', unsafe_allow_html=True)
+        st.markdown("## Location & Pollutant Selection")
+        st.markdown('<p class="caption">Select a specific ZIP code and pollutant type to view detailed data.</p>', unsafe_allow_html=True)
 
-    col1, col2 = st.columns([1, 1])
-    with col1:
-        zip_code = st.selectbox("Choose a ZIP Code", COLORADO_ZIPS)
-    with col2:
-        # Only show PM2.5 as per user request
-        pollutant = "PM2.5"
-        st.info("Currently focusing on PM2.5 data only")
-    st.markdown('</div>', unsafe_allow_html=True)
+        col1, col2 = st.columns([1, 1])
+        with col1:
+            zip_code = st.selectbox("Choose a ZIP Code", COLORADO_ZIPS)
+        with col2:
+            # Only show PM2.5 as per user request - with improved styling
+            pollutant = "PM2.5"
+            st.markdown('<div class="pm25-info">Currently focusing on PM2.5 data only</div>', unsafe_allow_html=True)
+        st.markdown('</div>', unsafe_allow_html=True)
 
-    # Data fetch
-    air_data = get_air_quality_data(zip_code, pollutant)
-    asthma_data = get_asthma_data(zip_code)
+        # Data fetch
+        air_data = get_air_quality_data(zip_code, pollutant)
+        asthma_data = get_asthma_data(zip_code)
 
-    # Pollution trend section
-    st.markdown('<div class="section-card">', unsafe_allow_html=True)
-    st.markdown("## Pollution Trend Analysis")
-    st.markdown('<p class="caption">Recent air quality levels for the selected ZIP and pollutant. Interactive and zoomable chart.</p>', unsafe_allow_html=True)
+        # Pollution trend section
+        st.markdown('<div class="section-card">', unsafe_allow_html=True)
+        st.markdown("## Pollution Trend Analysis")
+        st.markdown('<p class="caption">Recent air quality levels for the selected ZIP and pollutant. Interactive and zoomable chart.</p>', unsafe_allow_html=True)
 
-    plot_pollution_trend(air_data, pollutant)
-    st.markdown('</div>', unsafe_allow_html=True)
+        plot_pollution_trend(air_data, pollutant)
+        st.markdown('</div>', unsafe_allow_html=True)
 
-    # Asthma correlation section
-    st.markdown('<div class="section-card">', unsafe_allow_html=True)
-    st.markdown("## Asthma and Pollution Correlation")
-    st.markdown('<p class="caption">This chart compares recent pollution trends with local asthma rates, showing potential health impacts.</p>', unsafe_allow_html=True)
+        # Asthma correlation section
+        st.markdown('<div class="section-card">', unsafe_allow_html=True)
+        st.markdown("## Asthma and Pollution Correlation")
+        st.markdown('<p class="caption">This chart compares recent pollution trends with local asthma rates, showing potential health impacts.</p>', unsafe_allow_html=True)
 
-    plot_asthma_vs_pollution(air_data, asthma_data)
-    st.markdown('</div>', unsafe_allow_html=True)
+        plot_asthma_vs_pollution(air_data, asthma_data)
+        st.markdown('</div>', unsafe_allow_html=True)
 
 # About page content
-elif page == "about":
-    st.markdown("# About This Project")
-    
-    st.markdown('<div class="section-card">', unsafe_allow_html=True)
-    st.markdown('<div class="about-container">', unsafe_allow_html=True)
-    
-    # About text section
-    st.markdown('<div class="about-text">', unsafe_allow_html=True)
-    st.markdown("## The Creator")
-    st.markdown("""
-    My name is Mateus, and I am a pre-med student at the Community College of Denver. I have a passion for both healthcare and programming, and I believe technology can revolutionize how we approach medical challenges.
-    
-    Growing up in São Paulo, Brazil, one of the most polluted cities in South America, I experienced firsthand the impact of poor air quality on health. As an asthma sufferer myself, I've always been acutely aware of how environmental factors affect respiratory conditions.
-    
-    This personal experience motivated me to create the Colorado Air & Asthma Tracker—a tool that visualizes the relationship between air pollution and asthma rates across Colorado. By making this data accessible and easy to understand, I hope to raise awareness about the importance of air quality for public health.
-    
-    My goal is to eventually combine my medical education with programming skills to develop innovative healthcare solutions that can improve people's lives.
-    """)
-    st.markdown('</div>', unsafe_allow_html=True)
-    
-    # Skills section
-    st.markdown('<div class="about-skills">', unsafe_allow_html=True)
-    st.markdown("## Technical Skills")
-    
-    st.markdown("""
-    This project was built entirely by me using:
-    
-    <div class="skill-item"><div class="skill-dot"></div>Python (Streamlit, Pandas, Plotly)</div>
-    <div class="skill-item"><div class="skill-dot"></div>SQL for data management</div>
-    <div class="skill-item"><div class="skill-dot"></div>API integration (AirNow, CDC)</div>
-    <div class="skill-item"><div class="skill-dot"></div>Data visualization</div>
-    <div class="skill-item"><div class="skill-dot"></div>Geospatial mapping</div>
-    <div class="skill-item"><div class="skill-dot"></div>Statistical analysis</div>
-    <div class="skill-item"><div class="skill-dot"></div>Responsive web design</div>
-    """, unsafe_allow_html=True)
-    
-    st.markdown('</div>', unsafe_allow_html=True)
-    st.markdown('</div>', unsafe_allow_html=True)
-    
-    # Project details
-    st.markdown("## Project Details")
-    st.markdown("""
-    The Colorado Air & Asthma Tracker uses real-time air quality data from monitoring stations across Colorado and combines it with asthma prevalence statistics. The application focuses specifically on PM2.5 (fine particulate matter), which is one of the most significant air pollutants affecting respiratory health.
-    
-    Key features of this project include:
-    
-    - Interactive map showing air quality levels across Colorado
-    - Real-time rankings of the most polluted and cleanest cities
-    - Detailed pollution trend analysis for specific ZIP codes
-    - Correlation visualization between pollution levels and asthma rates
-    
-    All data is updated in real-time, providing users with the most current information available about air quality in their area and how it might affect respiratory conditions like asthma.
-    
-    This project represents my commitment to using technology to address important public health issues and make complex data more accessible to everyone.
-    """)
-    
-    st.markdown('</div>', unsafe_allow_html=True)
+with tab2:
+    if page == "about":
+        st.markdown("# About This Project")
+        
+        st.markdown('<div class="section-card">', unsafe_allow_html=True)
+        st.markdown('<div class="about-container">', unsafe_allow_html=True)
+        
+        # About text section
+        st.markdown('<div class="about-text">', unsafe_allow_html=True)
+        st.markdown("## The Creator")
+        st.markdown("""
+        My name is Mateus, and I am a pre-med student at the Community College of Denver. I have a passion for both healthcare and programming, and I believe technology can revolutionize how we approach medical challenges.
+        
+        Growing up in São Paulo, Brazil, one of the most polluted cities in South America, I experienced firsthand the impact of poor air quality on health. As an asthma sufferer myself, I've always been acutely aware of how environmental factors affect respiratory conditions.
+        
+        This personal experience motivated me to create the Colorado Air & Asthma Tracker—a tool that visualizes the relationship between air pollution and asthma rates across Colorado. By making this data accessible and easy to understand, I hope to raise awareness about the importance of air quality for public health.
+        
+        My goal is to eventually combine my medical education with programming skills to develop innovative healthcare solutions that can improve people's lives.
+        """)
+        st.markdown('</div>', unsafe_allow_html=True)
+        
+        # Skills section
+        st.markdown('<div class="about-skills">', unsafe_allow_html=True)
+        st.markdown("## Technical Skills")
+        
+        st.markdown("""
+        This project was built entirely by me using:
+        
+        <div class="skill-item"><div class="skill-dot"></div>Python (Streamlit, Pandas, Plotly)</div>
+        <div class="skill-item"><div class="skill-dot"></div>SQL for data management</div>
+        <div class="skill-item"><div class="skill-dot"></div>API integration (AirNow, CDC)</div>
+        <div class="skill-item"><div class="skill-dot"></div>Data visualization</div>
+        <div class="skill-item"><div class="skill-dot"></div>Geospatial mapping</div>
+        <div class="skill-item"><div class="skill-dot"></div>Statistical analysis</div>
+        <div class="skill-item"><div class="skill-dot"></div>Responsive web design</div>
+        """, unsafe_allow_html=True)
+        
+        st.markdown('</div>', unsafe_allow_html=True)
+        st.markdown('</div>', unsafe_allow_html=True)
+        
+        # Project details
+        st.markdown("## Project Details")
+        st.markdown("""
+        The Colorado Air & Asthma Tracker uses real-time air quality data from monitoring stations across Colorado and combines it with asthma prevalence statistics. The application focuses specifically on PM2.5 (fine particulate matter), which is one of the most significant air pollutants affecting respiratory health.
+        
+        Key features of this project include:
+        
+        - Interactive map showing air quality levels across Colorado
+        - Real-time rankings of the most polluted and cleanest cities
+        - Detailed pollution trend analysis for specific ZIP codes
+        - Correlation visualization between pollution levels and asthma rates
+        
+        All data is updated in real-time, providing users with the most current information available about air quality in their area and how it might affect respiratory conditions like asthma.
+        
+        This project represents my commitment to using technology to address important public health issues and make complex data more accessible to everyone.
+        """)
+        
+        st.markdown('</div>', unsafe_allow_html=True)
 
-# JavaScript to handle navigation
+# JavaScript to handle navigation and tab switching
 st.markdown("""
 <script>
+    // Function to show About section
+    function showAbout() {
+        // Hide all tabs
+        const tabs = document.querySelectorAll('.stTabs [data-baseweb="tab-panel"]');
+        tabs.forEach(tab => {
+            tab.style.display = 'none';
+        });
+        
+        // Show the About tab (second tab)
+        tabs[1].style.display = 'block';
+        
+        // Update active link
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.classList.remove('active');
+        });
+        document.getElementById('about-link').classList.add('active');
+    }
+    
+    // Function to show Home section
+    function showHome() {
+        // Hide all tabs
+        const tabs = document.querySelectorAll('.stTabs [data-baseweb="tab-panel"]');
+        tabs.forEach(tab => {
+            tab.style.display = 'none';
+        });
+        
+        // Show the Home tab (first tab)
+        tabs[0].style.display = 'block';
+        
+        // Update active link
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.classList.remove('active');
+        });
+        document.getElementById('home-link').classList.add('active');
+    }
+    
+    // Hide the tab bar
+    document.querySelector('.stTabs [data-baseweb="tab-list"]').style.display = 'none';
+    
     // Get current page from URL
     const urlParams = new URLSearchParams(window.location.search);
     const currentPage = urlParams.get('page') || 'home';
     
-    // Update active link
-    document.querySelectorAll('.nav-link').forEach(link => {
-        link.classList.remove('active');
+    // Show the appropriate tab based on the URL
+    if (currentPage === 'about') {
+        showAbout();
+    } else {
+        showHome();
+    }
+    
+    // Add event listener to home link
+    document.getElementById('home-link').addEventListener('click', function(e) {
+        e.preventDefault();
+        showHome();
     });
-    document.getElementById(currentPage + '-link').classList.add('active');
+    
+    // Add event listener to about link
+    document.getElementById('about-link').addEventListener('click', function(e) {
+        e.preventDefault();
+        showAbout();
+    });
 </script>
 """, unsafe_allow_html=True)
 
