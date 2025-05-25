@@ -3,7 +3,6 @@ from config import COLORADO_ZIPS, POLLUTANTS
 from data_loader import get_air_quality_data, get_asthma_data, get_map_data
 from visualizations import (
     create_aqi_map,
-    show_aqi_cards,
     show_aqi_rankings,
     plot_pollution_trend,
     plot_asthma_vs_pollution
