@@ -8,10 +8,8 @@ from visualizations import (
     plot_asthma_vs_pollution
 )
 
-# Page config
-st.set_page_config(page_title="Colorado Air & Asthma Tracker", page_icon="🫁", layout="wide")
+st.set_page_config(page_title="Colorado Air & Asthma Tracker", layout="wide")
 
-# Custom CSS for styling - Enhanced for a clean, professional look
 st.markdown("""
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
@@ -35,6 +33,7 @@ st.markdown("""
             font-size: 2.5rem;
             margin-bottom: 0.75rem;
             color: #1e3a8a;
+            text-align: center;
         }
 
         h2 {
@@ -45,6 +44,7 @@ st.markdown("""
             color: #1e3a8a;
             border-bottom: 2px solid #e5e7eb;
             padding-bottom: 0.5rem;
+            text-align: center;
         }
 
         h3 {
@@ -70,7 +70,6 @@ st.markdown("""
             text-align: center;
         }
 
-        /* Card styling for sections */
         .card {
             background-color: #ffffff;
             border-radius: 0.75rem;
@@ -79,7 +78,6 @@ st.markdown("""
             margin-bottom: 1.5rem;
         }
 
-        /* Button styling */
         .stButton button {
             background-color: #2563eb;
             color: white;
@@ -89,20 +87,17 @@ st.markdown("""
             border: none;
         }
 
-        /* Selectbox styling */
         .stSelectbox div[data-baseweb="select"] {
             border-radius: 0.5rem;
             border: 1px solid #e5e7eb;
         }
 
-        /* Radio button styling */
         .stRadio [role="radiogroup"] {
             padding: 0.5rem;
             background-color: #f9fafb;
             border-radius: 0.5rem;
         }
 
-        /* Separator styling */
         hr {
             margin-top: 2rem;
             margin-bottom: 2rem;
@@ -111,15 +106,14 @@ st.markdown("""
             background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0));
         }
 
-        /* Caption styling */
         .caption {
             font-size: 0.875rem;
             color: #6b7280;
             font-style: italic;
             margin-bottom: 1rem;
+            text-align: center;
         }
 
-        /* Footer styling */
         .footer {
             text-align: center;
             padding: 2rem 0;
@@ -128,34 +122,34 @@ st.markdown("""
             border-top: 1px solid #e5e7eb;
             margin-top: 3rem;
         }
+
+        .rankings-container {
+            background-color: #ffffff;
+            padding: 2rem;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.08);
+        }
     </style>
 """, unsafe_allow_html=True)
 
-# Title and intro
-st.markdown("# 🫁 Colorado Air & Asthma Tracker")
+st.markdown("# Colorado Air & Asthma Tracker")
 st.markdown("Explore real-time air quality across Colorado ZIP codes and how it correlates with asthma.")
 st.markdown("---")
 
-# Map section
-st.markdown("## 🗺️ Colorado Air Quality Map")
+st.markdown("## Colorado Air Quality Map")
 st.markdown('<p class="caption">Interactive map showing air quality levels across Colorado. Larger circles indicate higher pollution levels.</p>', unsafe_allow_html=True)
-
-# Map visualization
 map_data = get_map_data()
 create_aqi_map(map_data)
 
-# Rankings section
 st.markdown("---")
-st.markdown("## 📊 Air Quality Rankings")
+st.markdown("## Air Quality Rankings")
 st.markdown('<p class="caption">Comparison of the most polluted and cleanest ZIP codes in Colorado based on current air quality data.</p>', unsafe_allow_html=True)
-
-# Rankings visualization
+st.markdown('<div class="rankings-container">', unsafe_allow_html=True)
 show_aqi_rankings(map_data)
+st.markdown('</div>', unsafe_allow_html=True)
 
 st.markdown("---")
-
-# ZIP and pollutant selection
-st.markdown("## 📍 Location & Pollutant Selection")
+st.markdown("## Location & Pollutant Selection")
 st.markdown('<p class="caption">Select a specific ZIP code and pollutant type to view detailed data.</p>', unsafe_allow_html=True)
 
 col1, col2 = st.columns([1, 1])
@@ -164,33 +158,27 @@ with col1:
 with col2:
     pollutant = st.radio("Select a pollutant", POLLUTANTS)
 
-# Data fetch
 air_data = get_air_quality_data(zip_code, pollutant)
 asthma_data = get_asthma_data(zip_code)
 
-# Pollution trend section
-st.markdown("## 📈 Pollution Trend Analysis")
+st.markdown("## Pollution Trend Analysis")
 st.markdown('<p class="caption">Recent air quality levels for the selected ZIP and pollutant. Interactive and zoomable chart.</p>', unsafe_allow_html=True)
-
 plot_pollution_trend(air_data, pollutant)
 
-# Asthma correlation section
-st.markdown("## 🫁 Asthma and Pollution Correlation")
+st.markdown("## Asthma and Pollution Correlation")
 st.markdown('<p class="caption">This chart compares recent pollution trends with local asthma rates, showing potential health impacts.</p>', unsafe_allow_html=True)
-
 plot_asthma_vs_pollution(air_data, asthma_data)
 
-# Enhanced footer
 st.markdown("---")
 st.markdown("""
 <div class="footer">
     <div>
-        <strong>Data Sources:</strong> AirNow API & CDC Asthma Data | 
-        <strong>Updated:</strong> Real-time | 
+        <strong>Data Sources:</strong> AirNow API & CDC Asthma Data |
+        <strong>Updated:</strong> Real-time |
         <strong>Coverage:</strong> Colorado ZIP Codes
     </div>
     <div style="margin-top: 0.5rem;">
-        Built with 💙 for Colorado • Powered by Streamlit • © 2025
+        Built with ❤️ for Colorado • Powered by Streamlit • © 2025
     </div>
 </div>
 """, unsafe_allow_html=True)
