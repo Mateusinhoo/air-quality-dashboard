@@ -75,12 +75,12 @@ def get_map_data():
         ("80831", "Peyton", 38.9608, -104.6006)
     ]
 
-    pollutants = ["PM2.5", "Ozone"]
+    # Only use PM2.5 as the pollutant as per user request
+    pollutant = "PM2.5"
 
     mock_data = []
     for zip_code, city, lat, lon in zip_codes:
         aqi = random.randint(5, 150)
-        pollutant = random.choice(pollutants)
         mock_data.append({
             "zip": zip_code,
             "city": city,
