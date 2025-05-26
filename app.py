@@ -49,7 +49,7 @@ st.markdown("""
         font-weight: 700;
         font-size: 3rem;
         margin-bottom: 1rem;
-        color: #212529;
+        color: #1E90FF;
     }
     
     h2 {
@@ -57,7 +57,7 @@ st.markdown("""
         font-size: 2.25rem;
         margin-top: 3rem;
         margin-bottom: 1.5rem;
-        color: #007bff;  /* Changed to blue */
+        color: #1E90FF;
         text-align: center;
     }
     
@@ -66,7 +66,7 @@ st.markdown("""
         font-size: 1.5rem;
         margin-top: 2rem;
         margin-bottom: 1rem;
-        color: #007bff;  /* Changed to blue */
+        color: #1E90FF;
     }
     
     p, li {
@@ -97,7 +97,7 @@ st.markdown("""
     }
     
     .logo-text {
-        color: #007bff;
+        color: #1E90FF;
         font-weight: 700;
         font-size: 1.5rem;
         margin-left: 0.5rem;
@@ -117,11 +117,11 @@ st.markdown("""
     }
     
     .nav-link:hover {
-        background-color: rgba(0,123,255,0.1);
+        background-color: rgba(30,144,255,0.1);
     }
     
     .nav-home {
-        color: #007bff;
+        color: #1E90FF;
     }
     
     .nav-about {
@@ -138,7 +138,7 @@ st.markdown("""
     
     .nav-home:hover {
         color: #fff;
-        background-color: #007bff;
+        background-color: #1E90FF;
     }
     
     .nav-about:hover {
@@ -199,7 +199,7 @@ st.markdown("""
     }
     
     .toggle-checkbox:checked + .toggle-label {
-        background-color: #007bff;
+        background-color: #1E90FF;
     }
     
     .toggle-checkbox:checked + .toggle-label:before {
@@ -231,12 +231,13 @@ st.markdown("""
         font-size: 1.2rem;
         max-width: 800px;
         margin-bottom: 2rem;
-        color: white;  /* Changed to white */
+        color: white;
+        text-align: center;
     }
     
     .hero-button {
-        background-color: #007bff;
-        color: white;  /* Changed to white */
+        background-color: #1E90FF;
+        color: white;
         padding: 0.75rem 1.5rem;
         border-radius: 5px;
         font-weight: 500;
@@ -277,13 +278,14 @@ st.markdown("""
     .stat-value {
         font-size: 2.5rem;
         font-weight: 700;
-        color: #007bff;
+        color: #1E90FF;
         margin-bottom: 0.5rem;
     }
     
     .stat-label {
         color: #6c757d;
         font-weight: 500;
+        text-align: center;
     }
     
     /* Section styling */
@@ -291,7 +293,7 @@ st.markdown("""
         font-size: 2rem;
         font-weight: 600;
         margin-bottom: 1rem;
-        color: #007bff;  /* Changed to blue */
+        color: #1E90FF;
         text-align: center;
     }
     
@@ -337,7 +339,7 @@ st.markdown("""
     
     .progress-value {
         font-weight: 600;
-        color: #007bff;
+        color: #1E90FF;
     }
     
     .progress-bar-bg {
@@ -354,43 +356,43 @@ st.markdown("""
     
     .progress-pm25 {
         width: 65%;
-        background-color: #007bff;
+        background-color: #1E90FF;
     }
     
     .progress-24h {
         width: 48%;
-        background-color: #007bff;
+        background-color: #1E90FF;
     }
     
     .progress-weekly {
         width: 37%;
-        background-color: #007bff;
+        background-color: #1E90FF;
     }
     
     /* Skills progress bars */
     .progress-python {
         width: 90%;
-        background-color: #007bff;
+        background-color: #1E90FF;
     }
     
     .progress-dataviz {
         width: 85%;
-        background-color: #007bff;
+        background-color: #1E90FF;
     }
     
     .progress-api {
         width: 80%;
-        background-color: #007bff;
+        background-color: #1E90FF;
     }
     
     .progress-sql {
         width: 75%;
-        background-color: #007bff;
+        background-color: #1E90FF;
     }
     
     .progress-webdev {
         width: 70%;
-        background-color: #007bff;
+        background-color: #1E90FF;
     }
     
     /* Timeline */
@@ -420,7 +422,7 @@ st.markdown("""
         font-weight: 600;
         font-size: 1.2rem;
         margin-bottom: 0.5rem;
-        color: #007bff;
+        color: #1E90FF;
     }
     
     /* Footer */
@@ -433,11 +435,12 @@ st.markdown("""
     
     .footer-text {
         color: #757575;
+        text-align: center;
     }
     
     /* Utility classes */
     .text-blue {
-        color: #007bff;
+        color: #1E90FF;
     }
     
     .text-center {
@@ -450,13 +453,13 @@ st.markdown("""
     
     /* AQI categories */
     .aqi-category {
-        color: #007bff;  /* Changed to blue */
+        color: #1E90FF;
         font-weight: 500;
     }
     
     /* City names and rankings */
     .city-name, .city-value {
-        color: #007bff;  /* Changed to blue */
+        color: #1E90FF;
     }
     
     /* Hide Streamlit elements */
@@ -527,7 +530,7 @@ st.markdown("""
 st.markdown("""
 <div class="header-container">
     <div class="logo-container">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#007bff" width="32" height="32">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#1E90FF" width="32" height="32">
             <path d="M12 2a1 1 0 0 1 1 1c0 .24-.103.446-.271.623A4.126 4.126 0 0 0 11 7.5V9h1c3.866 0 7 3.134 7 7v5a1 1 0 0 1-1 1h-4a1 1 0 0 1-1-1v-5a2 2 0 0 0-2-2h-2a2 2 0 0 0-2 2v5a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1v-5c0-3.866 3.134-7 7-7h1V7.5a4.126 4.126 0 0 0-1.729-3.377A1.003 1.003 0 0 1 7 3a1 1 0 0 1 1-1h4z"/>
         </svg>
         <span class="logo-text">Colorado Air & Asthma Tracker</span>
@@ -580,7 +583,7 @@ st.markdown("""
 
 # Map section
 st.markdown('<div id="data"></div>', unsafe_allow_html=True)
-st.markdown('<h2 class="section-title" style="color: #1E90FF;">Colorado Air Quality Map</h2>', unsafe_allow_html=True)
+st.markdown('<h2 class="section-title">Colorado Air Quality Map</h2>', unsafe_allow_html=True)
 st.markdown('<p class="section-subtitle">Interactive map showing air quality levels across Colorado. Larger circles indicate higher pollution levels. Color indicates AQI category.</p>', unsafe_allow_html=True)
 
 # Map visualization
@@ -798,8 +801,8 @@ with col2:
 st.markdown("""
 <div class="content-card">
     <h3>Project Details</h3>
-    <p>The Colorado Air & Asthma Tracker uses real-time air quality data from monitoring stations across Colorado and combines it with asthma prevalence statistics. The application focuses specifically on PM2.5 (fine particulate matter), which is one of the most significant air pollutants affecting respiratory health.</p>
-    <p>Key features of this project include:</p>
+    <p class="text-center">The Colorado Air & Asthma Tracker uses real-time air quality data from monitoring stations across Colorado and combines it with asthma prevalence statistics. The application focuses specifically on PM2.5 (fine particulate matter), which is one of the most significant air pollutants affecting respiratory health.</p>
+    <p class="text-center">Key features of this project include:</p>
     <ul>
         <li>Interactive map showing air quality levels across Colorado</li>
         <li>Real-time rankings of the most polluted and cleanest cities</li>
@@ -808,8 +811,8 @@ st.markdown("""
         <li>Historical timeline of air quality milestones</li>
         <li>Resources for understanding and managing asthma</li>
     </ul>
-    <p>All data is updated in real-time, providing users with the most current information available about air quality in their area and how it might affect respiratory conditions like asthma.</p>
-    <p>This project represents my commitment to using technology to address important public health issues and make complex data more accessible to everyone.</p>
+    <p class="text-center">All data is updated in real-time, providing users with the most current information available about air quality in their area and how it might affect respiratory conditions like asthma.</p>
+    <p class="text-center">This project represents my commitment to using technology to address important public health issues and make complex data more accessible to everyone.</p>
 </div>
 """, unsafe_allow_html=True)
 
