@@ -526,11 +526,6 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-# Example usage of headers
-st.markdown("<h1>My Blue Title</h1>", unsafe_allow_html=True)
-st.markdown("<h2>Blue Subtitle</h2>", unsafe_allow_html=True)
-st.markdown("<h3>Smaller Blue Heading</h3>", unsafe_allow_html=True)
-
 # Header with navigation
 st.markdown("""
 <div class="header-container">
