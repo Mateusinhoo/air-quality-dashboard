@@ -44,29 +44,29 @@ st.markdown("""
         background-color: #fff;
     }
     
-    /* Typography */
+   /* Typography */
     h1 {
         font-weight: 700;
         font-size: 3rem;
         margin-bottom: 1rem;
-        color: #1E90FF;
+        color: #1E90FF !important;
     }
-    
+
     h2 {
         font-weight: 600;
         font-size: 2.25rem;
         margin-top: 3rem;
         margin-bottom: 1.5rem;
-        color: #1E90FF;
+        color: #1E90FF !important;
         text-align: center;
     }
-    
+
     h3 {
         font-weight: 600;
         font-size: 1.5rem;
         margin-top: 2rem;
         margin-bottom: 1rem;
-        color: #1E90FF;
+        color: #1E90FF !important;
     }
     
     p, li {
