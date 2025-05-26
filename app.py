@@ -583,6 +583,12 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # Map section
+st.markdown("""
+    '<div id="data">
+    <h2 class="section-title">Colorado Air Quality Map</h2>
+    <p class="section-subtitle">Interactive map showing air quality levels across Colorado. Larger circles indicate higher pollution levels. Color indicates AQI category.</p>
+
+# Map section
 st.markdown('<div id="data"></div>', unsafe_allow_html=True)
 st.markdown('<h2 class="section-title">Colorado Air Quality Map</h2>', unsafe_allow_html=True)
 st.markdown('<p class="section-subtitle">Interactive map showing air quality levels across Colorado. Larger circles indicate higher pollution levels. Color indicates AQI category.</p>', unsafe_allow_html=True)
