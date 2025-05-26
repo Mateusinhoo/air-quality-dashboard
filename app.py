@@ -58,6 +58,7 @@ st.markdown("""
         margin-top: 3rem;
         margin-bottom: 1.5rem;
         color: #007bff;  /* Changed to blue */
+        text-align: center;
     }
     
     h3 {
