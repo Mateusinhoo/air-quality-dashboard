@@ -57,7 +57,7 @@ st.markdown("""
         font-size: 2.25rem;
         margin-top: 3rem;
         margin-bottom: 1.5rem;
-        color: #212529;
+        color: #007bff;  /* Changed to blue */
     }
     
     h3 {
@@ -65,7 +65,7 @@ st.markdown("""
         font-size: 1.5rem;
         margin-top: 2rem;
         margin-bottom: 1rem;
-        color: #212529;
+        color: #007bff;  /* Changed to blue */
     }
     
     p, li {
@@ -230,11 +230,12 @@ st.markdown("""
         font-size: 1.2rem;
         max-width: 800px;
         margin-bottom: 2rem;
+        color: white;  /* Changed to white */
     }
     
     .hero-button {
         background-color: #007bff;
-        color: white;
+        color: white;  /* Changed to white */
         padding: 0.75rem 1.5rem;
         border-radius: 5px;
         font-weight: 500;
@@ -289,7 +290,7 @@ st.markdown("""
         font-size: 2rem;
         font-weight: 600;
         margin-bottom: 1rem;
-        color: #212121;
+        color: #007bff;  /* Changed to blue */
         text-align: center;
     }
     
@@ -444,6 +445,17 @@ st.markdown("""
     
     .mb-4 {
         margin-bottom: 1.5rem;
+    }
+    
+    /* AQI categories */
+    .aqi-category {
+        color: #007bff;  /* Changed to blue */
+        font-weight: 500;
+    }
+    
+    /* City names and rankings */
+    .city-name, .city-value {
+        color: #007bff;  /* Changed to blue */
     }
     
     /* Hide Streamlit elements */
@@ -601,7 +613,7 @@ asthma_data = get_asthma_data(zip_code)
 st.markdown('<h2 class="section-title">Pollution Trend Analysis</h2>', unsafe_allow_html=True)
 st.markdown('<p class="section-subtitle">Recent air quality levels for the selected ZIP and pollutant. Interactive and zoomable chart.</p>', unsafe_allow_html=True)
 
-# Add progress bars for pollution levels
+# Add progress bars for pollution levels - Fixed the display issue
 st.markdown("""
 <div class="content-card">
     <div class="progress-container">
@@ -686,12 +698,12 @@ with col1:
         <h3>Understanding AQI</h3>
         <p>The Air Quality Index (AQI) is a standardized indicator for reporting air quality. It tells you how clean or polluted your air is and what associated health effects might be of concern.</p>
         <ul>
-            <li>0-50: Good (Green)</li>
-            <li>51-100: Moderate (Yellow)</li>
-            <li>101-150: Unhealthy for Sensitive Groups (Orange)</li>
-            <li>151-200: Unhealthy (Red)</li>
-            <li>201-300: Very Unhealthy (Purple)</li>
-            <li>301+: Hazardous (Maroon)</li>
+            <li><span class="aqi-category">Good</span> (Green): 0-50</li>
+            <li><span class="aqi-category">Moderate</span> (Yellow): 51-100</li>
+            <li><span class="aqi-category">Unhealthy for Sensitive Groups</span> (Orange): 101-150</li>
+            <li><span class="aqi-category">Unhealthy</span> (Red): 151-200</li>
+            <li><span class="aqi-category">Very Unhealthy</span> (Purple): 201-300</li>
+            <li><span class="aqi-category">Hazardous</span> (Maroon): 301+</li>
         </ul>
     </div>
     """, unsafe_allow_html=True)
