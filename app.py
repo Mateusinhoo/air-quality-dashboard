@@ -305,6 +305,7 @@ st.markdown("""
         max-width: 800px;
         margin-left: auto;
         margin-right: auto;
+        display: block;
     }
     
     /* Card styling */
