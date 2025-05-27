@@ -236,8 +236,8 @@ st.markdown("""
     }
     
     .hero-button {
-        background-color: #1E90FF;
-        color: white;
+        background-color: white;
+    color: #1E90FF;
         padding: 0.75rem 1.5rem;
         border-radius: 5px;
         font-weight: 500;
