@@ -308,6 +308,22 @@ st.markdown("""
         display: block;
     }
     
+    /* Improved subtitle styling for vertical centering */
+    .map-subtitle-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 60px; /* Ensures enough vertical space */
+    }
+    
+    .map-subtitle {
+        font-size: 1.1rem;
+        color: #757575;
+        text-align: center;
+        max-width: 800px;
+        margin: 0 auto;
+    }
+    
     /* Card styling */
     .content-card {
         background-color: white;
@@ -336,6 +352,7 @@ st.markdown("""
     
     .progress-name {
         font-weight: 500;
+        color: #1f2937; /* Ensuring skill names are dark and visible */
     }
     
     .progress-value {
@@ -585,7 +602,7 @@ st.markdown("""
 # Map section
 st.markdown('<div id="data"></div>', unsafe_allow_html=True)
 st.markdown('<h2 class="section-title">Colorado Air Quality Map</h2>', unsafe_allow_html=True)
-st.markdown('<p class="section-subtitle">Interactive map showing air quality levels across Colorado. Larger circles indicate higher pollution levels. Color indicates AQI category.</p>', unsafe_allow_html=True)
+st.markdown('<div class="map-subtitle-container"><p class="map-subtitle">Interactive map showing air quality levels across Colorado. Larger circles indicate higher pollution levels. Color indicates AQI category.</p></div>', unsafe_allow_html=True)
 
 # Map visualization
 map_data = get_map_data()
@@ -799,28 +816,10 @@ with col2:
     </div>
     """, unsafe_allow_html=True)
 
-st.markdown("""
-<div class="content-card">
-    <h3>Project Details</h3>
-    <p class="text-center">The Colorado Air & Asthma Tracker uses real-time air quality data from monitoring stations across Colorado and combines it with asthma prevalence statistics. The application focuses specifically on PM2.5 (fine particulate matter), which is one of the most significant air pollutants affecting respiratory health.</p>
-    <p class="text-center">Key features of this project include:</p>
-    <ul>
-        <li>Interactive map showing air quality levels across Colorado</li>
-        <li>Real-time rankings of the most polluted and cleanest cities</li>
-        <li>Detailed pollution trend analysis for specific ZIP codes</li>
-        <li>Correlation visualization between pollution levels and asthma rates</li>
-        <li>Historical timeline of air quality milestones</li>
-        <li>Resources for understanding and managing asthma</li>
-    </ul>
-    <p class="text-center">All data is updated in real-time, providing users with the most current information available about air quality in their area and how it might affect respiratory conditions like asthma.</p>
-    <p class="text-center">This project represents my commitment to using technology to address important public health issues and make complex data more accessible to everyone.</p>
-</div>
-""", unsafe_allow_html=True)
-
 # Footer
 st.markdown("""
 <div class="footer">
-    <p class="footer-text">&copy; 2025 Colorado Air & Asthma Tracker | Created by Mateus</p>
+    <p class="footer-text">© 2023 Colorado Air & Asthma Tracker | Created by Mateus | Data updated daily</p>
 </div>
 """, unsafe_allow_html=True)
 
