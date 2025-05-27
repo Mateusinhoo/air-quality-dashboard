@@ -199,6 +199,7 @@ def show_aqi_rankings(data):
             width: 30px;
             text-align: center;
             font-weight: 500;
+            color: #1f2937; /* Ensuring numbers are dark and visible */
         }
         
         .ranking-city {
@@ -206,6 +207,7 @@ def show_aqi_rankings(data):
             display: flex;
             align-items: center;
             font-weight: 500;
+            color: #1f2937; /* Ensuring city names are dark and visible */
         }
         
         .ranking-aqi {
@@ -349,7 +351,7 @@ def plot_asthma_vs_pollution(air_data, asthma_data):
 
     fig.update_layout(
         height=350,
-        title="PM2.5 Pollution vs Asthma Rate",
+        title="PM2.5 Levels vs. Local Asthma Rate",
         margin=dict(l=20, r=20, t=40, b=20),
         paper_bgcolor="white",
         plot_bgcolor="#f8fafc",
