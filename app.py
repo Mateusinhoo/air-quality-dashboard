@@ -541,6 +541,21 @@ st.markdown("""
             padding: 0.25rem 0.5rem;
             font-size: 0.9rem;
         }
+        /* FIX: Force width to apply when both classes are used */
+.progress-bar-fill.progress-24h {
+    width: 48%;
+    background-color: #1E90FF;
+}
+
+.progress-bar-fill.progress-weekly {
+    width: 37%;
+    background-color: #1E90FF;
+}
+
+.progress-bar-fill.progress-pm25 {
+    width: 65%;
+    background-color: #1E90FF;
+}
     }
 </style>
 """, unsafe_allow_html=True)
