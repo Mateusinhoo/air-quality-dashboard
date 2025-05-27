@@ -758,7 +758,7 @@ with col1:
     st.markdown("""
     <div class="content-card">
         <h3>The Creator</h3>
-        <p>My name is Mateus, and I am a pre-med student at the Community College of Denver. I have a passion for both healthcare and programming, and I believe technology can revolutionize how we approach medical challenges.</p>
+        <p>My name is Mateus, and I am a pre-med student at the University of Colorado. I have a passion for both healthcare and programming, and I believe technology can revolutionize how we approach medical challenges.</p>
         <p>Growing up in São Paulo, Brazil, one of the most polluted cities in South America, I experienced firsthand the impact of poor air quality on health. As an asthma sufferer myself, I've always been acutely aware of how environmental factors affect respiratory conditions.</p>
         <p>This personal experience motivated me to create the Colorado Air & Asthma Tracker—a tool that visualizes the relationship between air pollution and asthma rates across Colorado. By making this data accessible and easy to understand, I hope to raise awareness about the importance of air quality for public health.</p>
         <p>My goal is to eventually combine my medical education with programming skills to develop innovative healthcare solutions that can improve people's lives.</p>
