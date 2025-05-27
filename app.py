@@ -370,6 +370,7 @@ st.markdown("""
     .progress-bar-fill {
         height: 100%;
         border-radius: 5px;
+        transition: width 0.5s ease-in-out;
     }
     
     .progress-pm25 {
