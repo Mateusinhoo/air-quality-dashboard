@@ -610,7 +610,7 @@ create_aqi_map(map_data)
 
 # Rankings section
 st.markdown('<h2 class="section-title">Air Quality Rankings</h2>', unsafe_allow_html=True)
-st.markdown('<p class="section-subtitle">Comparison of the most polluted and cleanest cities in Colorado based on current air quality data.</p>', unsafe_allow_html=True)
+st.markdown('<div class="map-subtitle-container"><p class="map-subtitle">Comparison of the most polluted and cleanest cities in Colorado based on current air quality data.</p></div>', unsafe_allow_html=True)
 
 # Rankings visualization
 show_aqi_rankings(map_data)
