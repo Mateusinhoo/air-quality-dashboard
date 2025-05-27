@@ -97,20 +97,20 @@ def get_aqi_color(aqi):
     else:
         return "#a87383"
 
-
 def get_aqi_color_rgb(aqi):
     if aqi <= 50:
-        return [173, 216, 230]      # Light blue
+        return [168, 224, 95]
     elif aqi <= 100:
-        return [100, 149, 237]      # Cornflower blue
+        return [253, 215, 75]
     elif aqi <= 150:
-        return [70, 130, 180]       # Steel blue
+        return [254, 155, 87]
     elif aqi <= 200:
-        return [30, 144, 255]       # Dodger blue
+        return [254, 106, 105]
     elif aqi <= 300:
-        return [0, 102, 204]        # Strong blue
+        return [169, 122, 188]
     else:
-        return [0, 51, 102]         # Dark navy blue
+        return [168, 115, 131]
+
 def get_flag_image():
     # US flag SVG as base64
     flag_svg = """
